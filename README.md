@@ -1,307 +1,100 @@
-# Nutrition PWA - Installation & Setup Guide
+<p align="right"><b>English</b> · <a href="README.de.md">Deutsch</a></p>
 
-A mobile-first Progressive Web App for tracking daily calories and macronutrients. Self-hosted with FastAPI backend and React frontend.
+<p align="center"><img src="frontend/public/icon-192.png" width="96" alt="MacroBandit"></p>
 
-## 🚀 Quick Start
+<h1 align="center">MacroBandit</h1>
 
-### Prerequisites
-- **Docker & Docker Compose** (recommended)
-- OR: **Python 3.11+**, **Node.js 18+**, **npm**
+<p align="center">
+  Free, ad-free macro &amp; calorie tracker for athletes – installable as a PWA.<br>
+  Live at <a href="https://macrobandit.at">macrobandit.at</a>
+</p>
 
-### Using Docker (Recommended)
+---
 
-```bash
-cd nutrition-pwa
-docker-compose up -d
+## Features
+
+- **Barcode scanner** – scan products with the phone camera; nutrition data comes from Open Food Facts
+- **Gram-precise logging** – every entry in grams, calories and macros are calculated instantly
+- **Own foods & meal templates** – save favourites and whole meals, apply them with one tap
+- **TDEE calculator** – daily energy need (Mifflin-St Jeor) and personal macro goals
+- **Weekly & monthly reports** – totals, averages and goal achievement
+- **Weight tracker** – log body weight and follow the trend
+- **Reminders** – optional web push notification if nothing was logged yet
+- **Accounts** – registration with e-mail verification, password reset, avatar, data export, account deletion
+- **Admin panel** – user management, broadcast e-mail, inactivity reminders, statistics
+- **PWA** – installable on Android/iOS, works offline-tolerant, update banner for new versions
+- **German & English**, light & dark theme
+
+## Tech stack
+
+| Part | Technology |
+|---|---|
+| Frontend | React, Vite, Tailwind CSS, i18next, Service Worker |
+| Backend | Python, FastAPI, SQLAlchemy |
+| Database | PostgreSQL |
+| Web server | nginx (serves the built frontend, proxies `/api` to the backend) |
+
+## Project layout
+
+```
+backend/            FastAPI app (main.py, routers/, models.py)
+  send_reminders.py push reminders (run every minute via cron)
+  import_bls.py     optional import of the German food database (BLS)
+frontend/           React app (src/, public/, vite.config.js)
+nginx.conf          example nginx site
+deploy.sh           build frontend + restart backend
 ```
 
-Access the app at `http://localhost`
+## Setup
 
-### Manual Setup
+### Requirements
+- Python 3.11+, Node.js 20+, PostgreSQL 15+, nginx
 
-#### Backend Setup
+### Backend
 
 ```bash
 cd backend
-
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
+python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-
-# Run the server
-uvicorn main:app --host 0.0.0.0 --port 8000
+uvicorn main:app --host 127.0.0.1 --port 8000
 ```
 
-The API will be available at `http://localhost:8000`
-- API Docs: `http://localhost:8000/docs`
-- OpenAPI: `http://localhost:8000/openapi.json`
+The tables are created automatically on first start. Configuration is read from environment variables:
 
-#### Frontend Setup
+| Variable | Purpose |
+|---|---|
+| `DATABASE_URL` | e.g. `postgresql://macrobandit:<password>@localhost/macrobandit` |
+| `SECRET_KEY`, `REFRESH_SECRET_KEY` | JWT signing keys – long random values |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` | e-mail for verification / password reset (optional) |
+| `NOTIFY_EMAIL` | receives new-registration and feedback notifications (optional) |
+| `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_CLAIMS` | web push reminders (optional) |
+
+Run the backend as a systemd service in production.
+
+### Frontend
 
 ```bash
 cd frontend
-
-# Install dependencies
-npm install
-
-# Development server
-npm run dev
-# Access at http://localhost:5173
-
-# Build for production
-npm run build
-npm run preview
+npm ci
+npm run dev      # development: http://localhost:5173
+npm run build    # production build in frontend/dist
 ```
 
-## 📱 Features
+Point nginx at `frontend/dist` and proxy `/api/` to `127.0.0.1:8000` (see `nginx.conf`). Put TLS in front (Let's Encrypt or your reverse proxy).
 
-### 1. **Barcode Scanning**
-- Scan product barcodes using your phone camera
-- Fetches nutritional data from Open Food Facts API
-- Automatic macronutrient calculation
+### Deploying a new version
 
-### 2. **Local Favorites**
-- Add and manage custom food items
-- Pre-populated with common foods (chicken, eggs, oats, etc.)
-- Quick selection without API calls
+1. Raise `version` in `frontend/package.json` (semantic versioning).
+2. Run `deploy.sh` – it stamps the service worker, builds the frontend and restarts the backend.
+3. Users get an update banner on their next visit.
 
-### 3. **Daily Tracking**
-- Log meals with portion sizes in grams
-- Real-time calorie and macro calculations
-- Daily totals with visual progress bars
+## Backups
 
-### 4. **Offline Support**
-- Service Worker enables offline functionality
-- Cached API responses for offline access
-- Syncs when reconnected
-
-### 5. **PWA Installation**
-- Install as standalone app on mobile
-- Home screen icon
-- Offline-first design
-- Camera permissions for barcode scanner
-
-## 🔧 Configuration
-
-### Backend Configuration
-
-Edit `backend/main.py` to adjust:
-- **CORS allowed origins** (Line ~40)
-- **Database location** (Line ~10 in `database.py`)
-- **Default food items** (Line ~100 in `database.py`)
-
-```python
-# Modify CORS for production
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["https://yourdomain.com"],  # Change this
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-```
-
-### Frontend Configuration
-
-Edit `.env` and `.env.production`:
-
-```env
-# Development
-VITE_API_URL=http://localhost:8000/api
-
-# Production
-VITE_API_URL=/api
-```
-
-Modify macro goals in `src/components/Dashboard.jsx`:
-
-```javascript
-const MACRO_GOALS = {
-  calories: 2000,  // Your daily calorie goal
-  protein: 150,    // Grams of protein per day
-  carbs: 250,      // Grams of carbs per day
-  fat: 65,         // Grams of fat per day
-}
-```
-
-## 📊 API Endpoints
-
-### Foods
-- `GET /api/foods` - List all custom foods
-- `POST /api/foods` - Create custom food
-- `GET /api/foods/{id}` - Get specific food
-- `DELETE /api/foods/{id}` - Delete food
-
-### Barcode
-- `GET /api/barcode/{barcode}` - Lookup Open Food Facts
-
-### Daily Logs
-- `POST /api/logs` - Add meal entry
-- `GET /api/logs/today` - Get today's meals
-- `GET /api/logs/date/{date}` - Get meals by date (YYYY-MM-DD)
-- `DELETE /api/logs/{id}` - Delete meal entry
-
-### Totals
-- `GET /api/totals/today` - Get today's totals
-- `GET /api/totals/date/{date}` - Get totals by date
-
-### Health
-- `GET /api/health` - Health check
-
-## 🗄️ Database Schema
-
-### `food_items` Table
-```sql
-CREATE TABLE food_items (
-    id INTEGER PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    brand VARCHAR(255),
-    calories_per_100g FLOAT,
-    protein_per_100g FLOAT,
-    carbs_per_100g FLOAT,
-    fat_per_100g FLOAT,
-    created_at DATETIME
-)
-```
-
-### `daily_logs` Table
-```sql
-CREATE TABLE daily_logs (
-    id INTEGER PRIMARY KEY,
-    food_item_id INTEGER NOT NULL,
-    food_name VARCHAR(255),
-    amount_grams FLOAT,
-    calories FLOAT,
-    protein FLOAT,
-    carbs FLOAT,
-    fat FLOAT,
-    created_at DATETIME,
-    date DATE
-)
-```
-
-## 🔒 Security Considerations
-
-1. **CORS**: Update `allow_origins` for your domain
-2. **HTTPS**: Use a reverse proxy (Nginx, Traefik) with SSL certificates
-3. **API Rate Limiting**: Add rate limiting middleware for production
-4. **Input Validation**: All inputs are validated via Pydantic
-5. **Database**: Keep database file secure and backed up
-
-## 📦 Production Deployment
-
-### Using Nginx Reverse Proxy
-
-```nginx
-server {
-    listen 443 ssl http2;
-    server_name nutrition.yourdomain.com;
-    
-    ssl_certificate /etc/letsencrypt/live/nutrition.yourdomain.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/nutrition.yourdomain.com/privkey.pem;
-    
-    location /api/ {
-        proxy_pass http://localhost:8000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-    
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_set_header Host $host;
-    }
-}
-```
-
-### Docker Compose for Production
+Back up the PostgreSQL database regularly, e.g. daily:
 
 ```bash
-# Build images
-docker-compose build
-
-# Run in detached mode
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-
-# Stop
-docker-compose down
+pg_dump macrobandit > backup/db_$(date +%Y%m%d).sql
 ```
-
-## 🐛 Troubleshooting
-
-### Barcode Scanner Not Working
-- Check browser camera permissions
-- Ensure HTTPS is used (required for camera access)
-- Use `http://localhost` for development
-
-### API Connection Issues
-- Verify backend is running: `curl http://localhost:8000/api/health`
-- Check `VITE_API_URL` in `.env`
-- Check CORS configuration in `backend/main.py`
-
-### Database Issues
-- Delete `nutrition_app.db` to reset
-- Check file permissions on database directory
-- Verify SQLite installation: `python -c "import sqlite3; print(sqlite3.sqlite_version)"`
-
-### Service Worker Problems
-- Clear browser cache
-- Check browser console for SW registration errors
-- Hard refresh (Cmd+Shift+R / Ctrl+Shift+R)
-
-## 📝 Adding Custom Foods
-
-### Via API
-```bash
-curl -X POST http://localhost:8000/api/foods \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "My Custom Food",
-    "brand": "My Brand",
-    "calories_per_100g": 250,
-    "protein_per_100g": 20,
-    "carbs_per_100g": 30,
-    "fat_per_100g": 5
-  }'
-```
-
-### Via UI
-1. Click "Add Meal"
-2. Search for food
-3. Select from list or use barcode scanner
-
-## 🔄 Data Backup
-
-SQLite database is located at:
-- Docker: `nutrition-db` volume (managed by Docker)
-- Manual: `backend/nutrition_app.db`
-
-Backup command:
-```bash
-cp backend/nutrition_app.db backup/nutrition_app.db.$(date +%s)
-```
-
-## 📄 License
-
-MIT License - feel free to modify and use for personal projects
-
-## 🤝 Contributing
-
-For issues or improvements, please submit a PR or open an issue.
-
-## 📞 Support
-
-For questions or issues, refer to:
-- FastAPI Docs: https://fastapi.tiangolo.com
-- React Docs: https://react.dev
-- PWA Docs: https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps
 
 ## License
 
