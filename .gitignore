@@ -1,0 +1,32 @@
+# Node
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# Database (WICHTIG: Deine privaten Daten bleiben geheim!)
+backend/data/
+*.db
+*.sqlite3
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Docker / Secrets
+.env
+*.env
+backend/.env
+!frontend/.env.production
+
+# DB-Backups (enthalten E-Mails + Passwort-Hashes)
+backup/*.sql
