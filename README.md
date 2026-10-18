@@ -1,6 +1,6 @@
 <p align="right"><b>English</b> · <a href="README.de.md">Deutsch</a></p>
 
-<p align="center"><img src="frontend/public/icon-192.png" width="96" alt="MacroBandit"></p>
+<p align="center"><img src="frontend/public/logo.png" width="96" alt="MacroBandit"></p>
 
 <h1 align="center">MacroBandit</h1>
 
