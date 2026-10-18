@@ -302,3 +302,9 @@ For questions or issues, refer to:
 - FastAPI Docs: https://fastapi.tiangolo.com
 - React Docs: https://react.dev
 - PWA Docs: https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps
+
+## License
+
+Copyright (C) 2026 CrashBandit82
+
+MacroBandit is free software: you can redistribute it and/or modify it under the terms of the **GNU Affero General Public License v3.0** as published by the Free Software Foundation. If you run a modified version as a network service, you must make its source code available to its users. See [LICENSE](LICENSE) for the full text.
