@@ -1,0 +1,1 @@
+New native app (Flutter) replacing the WebView shell: all features of the web app except reminders, light and dark theme.

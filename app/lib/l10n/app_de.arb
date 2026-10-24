@@ -1,0 +1,442 @@
+{
+  "@@locale": "de",
+  "appName": "MacroBandit",
+  "cancel": "Abbrechen",
+  "save": "Speichern",
+  "delete": "Löschen",
+  "edit": "Bearbeiten",
+  "close": "Schließen",
+  "back": "Zurück",
+  "retry": "Erneut versuchen",
+  "errorGeneric": "Etwas ist schiefgelaufen",
+  "errorOffline": "Keine Verbindung zu macrobandit.at",
+  "errorTooMany": "Zu viele Versuche – bitte kurz warten",
+  "sessionExpired": "Sitzung abgelaufen – bitte neu anmelden",
+  "authSubtitle": "Dein persönlicher Makro-Tracker",
+  "emailLabel": "E-Mail",
+  "passwordLabel": "Passwort",
+  "usernameLabel": "Benutzername",
+  "passwordRulesHint": "Mind. 8 Zeichen, Groß- und Kleinbuchstabe und eine Zahl",
+  "loginButton": "Anmelden",
+  "registerButton": "Konto erstellen",
+  "loginTab": "Anmelden",
+  "registerTab": "Registrieren",
+  "forgotPassword": "Passwort vergessen?",
+  "forgotTitle": "Passwort vergessen",
+  "forgotSubtitle": "Wir schicken dir einen Link zum Zurücksetzen. Das neue Passwort setzt du auf macrobandit.at.",
+  "sendResetLink": "Link senden",
+  "resetLinkSent": "Falls die E-Mail existiert, wurde ein Link gesendet.",
+  "registeredTitle": "Fast geschafft!",
+  "registeredText": "Wir haben eine Bestätigungs-E-Mail an {email} gesendet. Klicke auf „E-Mail bestätigen“ und melde dich danach hier an.",
+  "@registeredText": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "registeredSpam": "Keine E-Mail erhalten? Prüfe deinen Spam-Ordner.",
+  "toLogin": "Zur Anmeldung",
+  "authFooter": "macrobandit.at · Deine Daten bleiben bei dir",
+  "greeting": "Hallo, {name}!",
+  "@greeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tabNutrition": "Ernährung",
+  "tabWeight": "Gewicht",
+  "tabAccount": "Konto",
+  "todayDate": "Heute, {date}",
+  "@todayDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayDate": "Gestern, {date}",
+  "@yesterdayDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "today": "Heute",
+  "previousDay": "Vorheriger Tag",
+  "nextDay": "Nächster Tag",
+  "calorieOverview": "Kalorienübersicht",
+  "ofGoalKcal": "/ {goal} kcal",
+  "@ofGoalKcal": {
+    "placeholders": {
+      "goal": {
+        "type": "int"
+      }
+    }
+  },
+  "remaining": "übrig",
+  "over": "drüber",
+  "progressOfGoal": "{pct} % des Tagesziels",
+  "@progressOfGoal": {
+    "placeholders": {
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "adjustGoals": "Ziele anpassen",
+  "macroProtein": "Eiweiß",
+  "macroCarbs": "Kohlenhydrate",
+  "macroFat": "Fett",
+  "macroFiber": "Ballaststoffe",
+  "tabWeek": "Woche",
+  "tabMonth": "Monat",
+  "foodDatabase": "Lebensmittel",
+  "scanBarcode": "Barcode scannen",
+  "todayConsumed": "Heute verzehrt",
+  "meals": "Mahlzeiten",
+  "noEntries": "Noch keine Einträge.",
+  "entryCount": "{count, plural, =1{1 Eintrag} other{{count} Einträge}}",
+  "@entryCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "addMeal": "Mahlzeit eintragen",
+  "deleteLogConfirm": "Eintrag „{name}“ löschen?",
+  "@deleteLogConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "itemAdded": "{name} hinzugefügt",
+  "@itemAdded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "itemUpdated": "{name} aktualisiert",
+  "@itemUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "itemDeleted": "{name} gelöscht",
+  "@itemDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "editAmountTitle": "Menge ändern",
+  "currentAmount": "Aktuell: {grams} g · {kcal} kcal",
+  "@currentAmount": {
+    "placeholders": {
+      "grams": {
+        "type": "String"
+      },
+      "kcal": {
+        "type": "int"
+      }
+    }
+  },
+  "productNotFound": "Produkt nicht gefunden. Bitte frei eintragen.",
+  "emailNotVerified": "E-Mail nicht bestätigt",
+  "emailNotVerifiedSub": "Bitte bestätige deine E-Mail-Adresse.",
+  "resend": "Erneut senden",
+  "verificationSent": "Bestätigungs-E-Mail gesendet",
+  "goalsTitle": "Deine Ziele",
+  "calorieGoalLabel": "Kalorienziel (kcal)",
+  "gramsLabel": "{name} (g)",
+  "@gramsLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "goalsSaved": "Ziele gespeichert",
+  "tabSearch": "Suchen",
+  "tabCustom": "Frei eintragen",
+  "tabTemplates": "Vorlagen",
+  "searchLabel": "Lebensmittel, gern mit Menge",
+  "searchHint": "z. B. 200g Milch 3,5 oder Rinderfilet",
+  "quickAmount": "Menge erkannt: {grams} g · gesucht wird „{term}“",
+  "@quickAmount": {
+    "placeholders": {
+      "grams": {
+        "type": "String"
+      },
+      "term": {
+        "type": "String"
+      }
+    }
+  },
+  "onlineSearch": "Online suchen: „{term}“",
+  "@onlineSearch": {
+    "placeholders": {
+      "term": {
+        "type": "String"
+      }
+    }
+  },
+  "onlineSearching": "Suche online …",
+  "onlineSection": "Online (Open Food Facts)",
+  "onlineNone": "Online nichts gefunden",
+  "onlineError": "Online-Suche gerade nicht erreichbar",
+  "onlineHide": "Ausblenden",
+  "myFoodsSection": "Meine Lebensmittel",
+  "blsSection": "Grundlebensmittel (BLS)",
+  "blsSource": "Quelle: Bundeslebensmittelschlüssel 4.0, Max Rubner-Institut",
+  "familyTag": "Familie",
+  "noResults": "Kein Treffer – versuch den freien Eintrag",
+  "sourceScanned": "gescannt",
+  "kcalPer100": "{kcal} kcal / 100 g",
+  "@kcalPer100": {
+    "placeholders": {
+      "kcal": {
+        "type": "int"
+      }
+    }
+  },
+  "amountGrams": "Menge in Gramm",
+  "addButton": "Eintragen",
+  "shortCarbs": "KH",
+  "mealName": "Name der Mahlzeit",
+  "portionWeight": "Gewicht der Portion (g)",
+  "kcalPortion": "Kalorien (kcal)",
+  "customHint": "Werte für die ganze Portion. Die Mahlzeit wird als eigenes Lebensmittel gespeichert.",
+  "saveAndLog": "Speichern & eintragen",
+  "mealLogged": "Mahlzeit eingetragen",
+  "requiredField": "Pflichtfeld",
+  "invalidNumber": "Bitte eine Zahl über 0 eingeben",
+  "foodDbTitle": "Meine Lebensmittel",
+  "foodDbInfo": "Nur deine eigenen Einträge – globale Lebensmittel können nicht bearbeitet werden.",
+  "noOwnFoods": "Noch keine eigenen Lebensmittel.",
+  "editFoodTitle": "Lebensmittel bearbeiten",
+  "nameLabel": "Name",
+  "brandOptional": "Marke (optional)",
+  "kcalPer100Label": "kcal / 100 g",
+  "per100Label": "{name} / 100 g",
+  "@per100Label": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "portionLabel": "Portion (Bezeichnung)",
+  "portionLabelHint": "z. B. 1 Stück",
+  "portionGrams": "Portion (g)",
+  "deleteFoodConfirm": "„{name}“ aus deiner Datenbank löschen?",
+  "@deleteFoodConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "foodSaved": "{name} gespeichert",
+  "@foodSaved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "shareFamily": "Mit Familie teilen",
+  "unshareFamily": "Nicht mehr teilen",
+  "sharedWithFamily": "{name} wird mit der Familie geteilt",
+  "@sharedWithFamily": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "notSharedWithFamily": "{name} wird nicht mehr geteilt",
+  "@notSharedWithFamily": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "templatesEmpty": "Noch keine Vorlagen. Erstelle deine erste!",
+  "templateKcal": "{kcal} kcal gesamt",
+  "@templateKcal": {
+    "placeholders": {
+      "kcal": {
+        "type": "int"
+      }
+    }
+  },
+  "templateNew": "Neue Vorlage",
+  "templateEdit": "Vorlage bearbeiten",
+  "templateName": "Name (z. B. Frühstück Standard)",
+  "templateAddFood": "Lebensmittel hinzufügen …",
+  "templateNotFound": "Nicht gefunden",
+  "templateDeleteConfirm": "Vorlage „{name}“ löschen?",
+  "@templateDeleteConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "templateSaved": "Vorlage gespeichert",
+  "templateApplied": "„{name}“ eingetragen",
+  "@templateApplied": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "templateAmountError": "Bitte bei jedem Lebensmittel eine Menge über 0 g eingeben",
+  "templateNeedsItems": "Name und mindestens ein Lebensmittel nötig",
+  "weekTitle": "Diese Woche",
+  "weekAvg": "Ø {avg} kcal/Tag",
+  "@weekAvg": {
+    "placeholders": {
+      "avg": {
+        "type": "String"
+      }
+    }
+  },
+  "weekGoalReached": "Ziel erreicht",
+  "weekOver": "Über Ziel",
+  "monthNoData": "Keine Daten für diesen Monat",
+  "monthDaysTracked": "Tage getrackt",
+  "monthGoalDays": "Ziel erreicht",
+  "monthDays": "{count, plural, =1{1 Tag} other{{count} Tage}}",
+  "@monthDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "monthAvgKcal": "Ø Kalorien/Tag",
+  "monthAvgProtein": "Ø Eiweiß/Tag",
+  "monthAvgCarbs": "Ø Kohlenhydrate/Tag",
+  "monthAvgFat": "Ø Fett/Tag",
+  "monthBest": "Bester Tag",
+  "monthLowest": "Niedrigster Tag",
+  "monthDaily": "Tagesverlauf",
+  "monthGoalNotReached": "Ziel nicht erreicht",
+  "weightToday": "Gewicht heute",
+  "weightKg": "Gewicht (kg)",
+  "weightCurrent": "Aktuell",
+  "weightStart": "Start",
+  "weightTrend": "7 Tage",
+  "weightSaved": "Gewicht gespeichert",
+  "weightChartTitle": "Verlauf (60 Tage)",
+  "weightChartMin": "Mindestens 2 Einträge für den Verlauf",
+  "weightEntries": "Einträge",
+  "weightDeleteConfirm": "Eintrag vom {date} löschen?",
+  "@weightDeleteConfirm": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "tdeeTitle": "TDEE-Rechner",
+  "tdeeFormula": "Mifflin-St-Jeor-Formel",
+  "male": "Mann",
+  "female": "Frau",
+  "ageLabel": "Alter (Jahre)",
+  "heightLabel": "Größe (cm)",
+  "weightFromTracker": "Gewicht (aus Tracker): {kg}",
+  "@weightFromTracker": {
+    "placeholders": {
+      "kg": {
+        "type": "String"
+      }
+    }
+  },
+  "activityLabel": "Aktivitätslevel",
+  "activitySedentary": "Kaum Bewegung (Bürojob)",
+  "activityLight": "Leicht aktiv (1–3× Sport/Woche)",
+  "activityModerate": "Moderat aktiv (3–5× Sport/Woche)",
+  "activityActive": "Sehr aktiv (6–7× Sport/Woche)",
+  "activityVeryActive": "Extrem aktiv (2× täglich)",
+  "goalLabel": "Ziel",
+  "goalLose": "Abnehmen",
+  "goalMaintain": "Halten",
+  "goalGain": "Zunehmen",
+  "calcButton": "TDEE berechnen",
+  "tdeeResult": "Dein täglicher Kalorienbedarf",
+  "tdeeUnit": "kcal / Tag",
+  "applyGoal": "Als Kalorienziel übernehmen ({kcal} kcal)",
+  "@applyGoal": {
+    "placeholders": {
+      "kcal": {
+        "type": "int"
+      }
+    }
+  },
+  "fillAllFields": "Bitte Alter, Größe und Gewicht eintragen",
+  "goalSet": "Kalorienziel auf {kcal} kcal gesetzt",
+  "@goalSet": {
+    "placeholders": {
+      "kcal": {
+        "type": "int"
+      }
+    }
+  },
+  "changeAvatar": "Profilbild ändern",
+  "removeAvatar": "Profilbild entfernen",
+  "avatarUpdated": "Profilbild aktualisiert",
+  "avatarTooBig": "Bild zu groß (max. 5 MB)",
+  "changeUsername": "Benutzername ändern",
+  "newUsername": "Neuer Benutzername",
+  "usernameChanged": "Benutzername geändert",
+  "changePassword": "Passwort ändern",
+  "currentPassword": "Aktuelles Passwort",
+  "newPassword": "Neues Passwort",
+  "confirmPassword": "Neues Passwort wiederholen",
+  "passwordMismatch": "Passwörter stimmen nicht überein",
+  "passwordChanged": "Passwort geändert",
+  "exportTitle": "Daten exportieren",
+  "exportSub": "Alle deine Daten als CSV speichern",
+  "exportSaved": "Export gespeichert",
+  "feedbackTitle": "Feedback an CrashBandit",
+  "feedbackSub": "Lob, Wünsche oder Fehler melden",
+  "feedbackHint": "Was gefällt dir? Was könnte besser sein? Fehler gefunden?",
+  "feedbackMin": "Mindestens 5 Zeichen",
+  "feedbackThanks": "Danke für dein Feedback!",
+  "send": "Senden",
+  "logout": "Abmelden",
+  "logoutSub": "Von diesem Gerät abmelden",
+  "deleteAccount": "Konto löschen",
+  "deleteAccountSub": "Alle Daten unwiderruflich löschen",
+  "deleteWarning": "Diese Aktion ist unwiderruflich. Alle deine Einträge, Lebensmittel und Gewichte werden gelöscht.",
+  "deleteConfirmWord": "LÖSCHEN",
+  "deleteConfirmLabel": "Zur Bestätigung {word} eingeben",
+  "@deleteConfirmLabel": {
+    "placeholders": {
+      "word": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteFinal": "Endgültig löschen",
+  "themeTitle": "Darstellung",
+  "themeSystem": "System",
+  "themeLight": "Hell",
+  "themeDark": "Dunkel"
+}

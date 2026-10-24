@@ -1,0 +1,350 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import '../data/api.dart';
+import '../data/models.dart';
+import '../data/session.dart';
+import '../l10n/app_localizations.dart';
+import 'theme.dart';
+
+extension ContextX on BuildContext {
+  AppLocalizations get t => AppLocalizations.of(this);
+  Session get session => SessionScope.read(this);
+  Api get api => SessionScope.read(this).api;
+}
+
+/// Number with up to [digits] decimals in the app locale ("3,5" in German).
+String fmtNum(BuildContext context, num v, [int digits = 1]) {
+  final f = NumberFormat.decimalPattern(Localizations.localeOf(context).toLanguageTag())
+    ..minimumFractionDigits = 0
+    ..maximumFractionDigits = digits;
+  return f.format(v);
+}
+
+/// Parses "3,5" and "3.5"; null when empty or not a number.
+double? parseNum(String s) => double.tryParse(s.trim().replaceAll(',', '.'));
+
+String errorText(BuildContext context, Object error) {
+  final t = context.t;
+  if (error is ApiException) {
+    if (error.offline) return t.errorOffline;
+    if (error.status == 429) return t.errorTooMany;
+    if (error.detail != null && error.detail!.isNotEmpty) return error.detail!;
+  }
+  return t.errorGeneric;
+}
+
+void showMsg(BuildContext context, String text, {bool error = false}) {
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        content: Text(
+          text,
+          style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
+        ),
+        backgroundColor: error ? context.c.error : context.c.navIndicator,
+        persist: false,
+      ),
+    );
+}
+
+void showError(BuildContext context, Object error) => showMsg(context, errorText(context, error), error: true);
+
+Future<bool> confirm(BuildContext context, String text, {String? action, bool destructive = true}) async {
+  final t = context.t;
+  final ok = await showDialog<bool>(
+    context: context,
+    builder: (c) => AlertDialog(
+      content: Text(text),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(c, false), child: Text(t.cancel)),
+        TextButton(
+          onPressed: () => Navigator.pop(c, true),
+          style: destructive ? TextButton.styleFrom(foregroundColor: context.c.fatText) : null,
+          child: Text(action ?? t.delete),
+        ),
+      ],
+    ),
+  );
+  return ok ?? false;
+}
+
+/// Dialog with one text field; pops with the text or null. Owns its controller,
+/// so it is disposed only after the closing animation.
+class PromptDialog extends StatefulWidget {
+  const PromptDialog({
+    super.key,
+    required this.title,
+    required this.label,
+    this.initial = '',
+    this.header,
+    this.multiline = false,
+    this.maxLength,
+    this.numeric = false,
+    this.suffix,
+    this.action,
+  });
+
+  final String title;
+  final String label;
+  final String initial;
+  final Widget? header;
+  final bool multiline;
+  final int? maxLength;
+  final bool numeric;
+  final String? suffix;
+  final String? action;
+
+  @override
+  State<PromptDialog> createState() => _PromptDialogState();
+}
+
+class _PromptDialogState extends State<PromptDialog> {
+  late final _ctrl = TextEditingController(text: widget.initial);
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = context.t;
+    return AlertDialog(
+      title: Text(widget.title),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ?widget.header,
+          TextField(
+            controller: _ctrl,
+            autofocus: true,
+            minLines: widget.multiline ? 4 : 1,
+            maxLines: widget.multiline ? 8 : 1,
+            maxLength: widget.maxLength,
+            keyboardType: widget.numeric ? const TextInputType.numberWithOptions(decimal: true) : null,
+            decoration: InputDecoration(
+              hintText: widget.multiline ? widget.label : null,
+              labelText: widget.multiline ? null : widget.label,
+              suffixText: widget.suffix,
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(t.cancel)),
+        TextButton(onPressed: () => Navigator.pop(context, _ctrl.text), child: Text(widget.action ?? t.save)),
+      ],
+    );
+  }
+}
+
+/// Primary action in the user's gradient (like the web app's main buttons).
+class GradientButton extends StatelessWidget {
+  const GradientButton({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.busy = false,
+    this.icon,
+    this.height = 48,
+  });
+
+  final String label;
+  final VoidCallback? onPressed;
+  final bool busy;
+  final IconData? icon;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    final enabled = onPressed != null && !busy;
+    final session = SessionScope.of(context);
+    return Opacity(
+      opacity: enabled ? 1 : 0.5,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: session.state == SessionState.signedIn
+              ? Palette.userGradient(session.user.id)
+              : Palette.brandGradient,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(8),
+            onTap: enabled ? onPressed : null,
+            child: SizedBox(
+              height: height,
+              child: Center(
+                child: busy
+                    ? const SizedBox.square(
+                        dimension: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                      )
+                    : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (icon != null) ...[Icon(icon, color: Colors.white, size: 20), const SizedBox(width: 8)],
+                          Flexible(
+                            child: Text(
+                              label,
+                              overflow: TextOverflow.ellipsis,
+                              style: context.tt.labelLarge!.copyWith(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SectionLabel extends StatelessWidget {
+  const SectionLabel(this.text, {super.key, this.color});
+
+  final String text;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: 6, left: 2),
+    child: Semantics(
+      header: true,
+      child: Text(text.toUpperCase(), style: context.tt.labelSmall!.copyWith(color: color)),
+    ),
+  );
+}
+
+/// Thin progress bar on the theme's track.
+class Bar extends StatelessWidget {
+  const Bar({super.key, required this.fraction, required this.color, this.height = 4, this.label});
+
+  final double fraction;
+  final Color color;
+  final double height;
+
+  /// TalkBack label, e.g. "Eiweiß".
+  final String? label;
+
+  @override
+  Widget build(BuildContext context) => ClipRRect(
+    borderRadius: BorderRadius.circular(4),
+    child: LinearProgressIndicator(
+      value: fraction.clamp(0, 1),
+      minHeight: height,
+      color: color,
+      backgroundColor: context.c.track,
+      semanticsLabel: label,
+      semanticsValue: '${(fraction * 100).round()} %',
+    ),
+  );
+}
+
+/// Centered spinner / error with retry for a loading future.
+class LoadState extends StatelessWidget {
+  const LoadState({super.key, this.error, required this.onRetry});
+
+  final Object? error;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    if (error == null) {
+      return const Padding(
+        padding: EdgeInsets.all(32),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            errorText(context, error!),
+            textAlign: TextAlign.center,
+            style: TextStyle(color: context.c.muted),
+          ),
+          const SizedBox(height: 12),
+          OutlinedButton(onPressed: onRetry, child: Text(context.t.retry)),
+        ],
+      ),
+    );
+  }
+}
+
+/// Validator for required positive numbers.
+String? Function(String?) positiveNumber(BuildContext context, {bool required = true}) => (v) {
+  if ((v ?? '').trim().isEmpty) return required ? context.t.requiredField : null;
+  final n = parseNum(v!);
+  return n == null || n <= 0 ? context.t.invalidNumber : null;
+};
+
+String? Function(String?) requiredText(BuildContext context) =>
+    (v) => (v ?? '').trim().isEmpty ? context.t.requiredField : null;
+
+/// Profile picture from macrobandit.at, or the user's gradient with a person icon.
+class UserAvatar extends StatelessWidget {
+  const UserAvatar({super.key, required this.user, this.size = 64});
+
+  final User user;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final path = user.avatarPath;
+    if (path != null) {
+      return ClipOval(
+        child: Image.network(
+          '$serverOrigin$path',
+          width: size,
+          height: size,
+          cacheWidth: (size * MediaQuery.devicePixelRatioOf(context)).round(),
+          fit: BoxFit.cover,
+          errorBuilder: (_, _, _) => _placeholder(),
+        ),
+      );
+    }
+    return _placeholder();
+  }
+
+  Widget _placeholder() => Container(
+    width: size,
+    height: size,
+    decoration: BoxDecoration(shape: BoxShape.circle, gradient: Palette.userGradient(user.id)),
+    child: Icon(Icons.person, color: Colors.white, size: size * 0.53),
+  );
+}
+
+/// Limits content to a readable width on tablets and in landscape.
+class PageWidth extends StatelessWidget {
+  const PageWidth({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => Align(
+    alignment: Alignment.topCenter,
+    child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 640), child: child),
+  );
+}
+
+/// Bottom sheet with keyboard padding and scrolling content.
+Future<T?> showSheet<T>(BuildContext context, WidgetBuilder builder) => showModalBottomSheet<T>(
+  context: context,
+  isScrollControlled: true,
+  useSafeArea: true,
+  builder: (c) => Padding(
+    padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(c).bottom),
+    // useSafeArea leaves the bottom free: keep content above the system navigation bar
+    child: SafeArea(top: false, child: builder(c)),
+  ),
+);

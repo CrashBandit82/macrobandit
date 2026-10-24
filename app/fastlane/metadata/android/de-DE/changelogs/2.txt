@@ -1,0 +1,1 @@
+Neue, native App (Flutter) statt der WebView-Hülle: alle Funktionen der Web-App außer Erinnerungen, helles und dunkles Design.

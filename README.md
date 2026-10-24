@@ -23,6 +23,7 @@
 - **Accounts** – registration with e-mail verification, password reset, avatar, data export, account deletion
 - **Admin panel** – user management, broadcast e-mail, inactivity reminders, statistics
 - **PWA** – installable on Android/iOS, works offline-tolerant, update banner for new versions
+- **Android app** – native Flutter app in [`app/`](app/) (no Google services), same account as the web app
 - **German & English**, light & dark theme
 
 ## Tech stack

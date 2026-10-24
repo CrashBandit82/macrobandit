@@ -23,6 +23,7 @@
 - **Konto** – Registrierung mit E-Mail-Bestätigung, Passwort zurücksetzen, Profilbild, Datenexport, Konto löschen
 - **Admin-Bereich** – Nutzerverwaltung, Rundmail, Inaktivitäts-Erinnerungen, Statistiken
 - **PWA** – auf Android/iOS installierbar, offline-tolerant, Update-Hinweis bei neuen Versionen
+- **Android-App** – native Flutter-App in [`app/`](app/) (ohne Google-Dienste), gleiches Konto wie die Web-App
 - **Deutsch & Englisch**, helles & dunkles Design
 
 ## Technik

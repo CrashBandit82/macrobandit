@@ -1,0 +1,14 @@
+MacroBandit is a free and ad-free macro and calorie tracker for athletes. The native app works with your account on <a href="https://macrobandit.at">macrobandit.at</a>; an account is required and can be created in the app.
+
+<b>Features</b>
+<ul>
+<li>Barcode scanner (zxing, no Google services) – nutrition data from Open Food Facts</li>
+<li>Quick entry like "200g milk", search in your own foods, the German food database BLS 4.0 and online</li>
+<li>Gram-precise logging, calories and macros calculated instantly</li>
+<li>Own foods and meal templates, applied with one tap</li>
+<li>TDEE calculator and personal macro goals</li>
+<li>Weekly and monthly statistics, weight tracker with history</li>
+<li>Data export (CSV), German and English, light and dark theme</li>
+</ul>
+
+The app and the server software are free software under the GNU AGPL-3.0.
