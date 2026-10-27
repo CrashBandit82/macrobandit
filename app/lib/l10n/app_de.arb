@@ -9,35 +9,7 @@
   "back": "Zurück",
   "retry": "Erneut versuchen",
   "errorGeneric": "Etwas ist schiefgelaufen",
-  "errorOffline": "Keine Verbindung zu macrobandit.at",
-  "errorTooMany": "Zu viele Versuche – bitte kurz warten",
-  "sessionExpired": "Sitzung abgelaufen – bitte neu anmelden",
-  "authSubtitle": "Dein persönlicher Makro-Tracker",
-  "emailLabel": "E-Mail",
-  "passwordLabel": "Passwort",
-  "usernameLabel": "Benutzername",
-  "passwordRulesHint": "Mind. 8 Zeichen, Groß- und Kleinbuchstabe und eine Zahl",
-  "loginButton": "Anmelden",
-  "registerButton": "Konto erstellen",
-  "loginTab": "Anmelden",
-  "registerTab": "Registrieren",
-  "forgotPassword": "Passwort vergessen?",
-  "forgotTitle": "Passwort vergessen",
-  "forgotSubtitle": "Wir schicken dir einen Link zum Zurücksetzen. Das neue Passwort setzt du auf macrobandit.at.",
-  "sendResetLink": "Link senden",
-  "resetLinkSent": "Falls die E-Mail existiert, wurde ein Link gesendet.",
-  "registeredTitle": "Fast geschafft!",
-  "registeredText": "Wir haben eine Bestätigungs-E-Mail an {email} gesendet. Klicke auf „E-Mail bestätigen“ und melde dich danach hier an.",
-  "@registeredText": {
-    "placeholders": {
-      "email": {
-        "type": "String"
-      }
-    }
-  },
-  "registeredSpam": "Keine E-Mail erhalten? Prüfe deinen Spam-Ordner.",
-  "toLogin": "Zur Anmeldung",
-  "authFooter": "macrobandit.at · Deine Daten bleiben bei dir",
+  "errorOffline": "Keine Internetverbindung",
   "greeting": "Hallo, {name}!",
   "@greeting": {
     "placeholders": {
@@ -48,7 +20,7 @@
   },
   "tabNutrition": "Ernährung",
   "tabWeight": "Gewicht",
-  "tabAccount": "Konto",
+  "tabAccount": "Profil",
   "todayDate": "Heute, {date}",
   "@todayDate": {
     "placeholders": {
@@ -153,10 +125,6 @@
     }
   },
   "productNotFound": "Produkt nicht gefunden. Bitte frei eintragen.",
-  "emailNotVerified": "E-Mail nicht bestätigt",
-  "emailNotVerifiedSub": "Bitte bestätige deine E-Mail-Adresse.",
-  "resend": "Erneut senden",
-  "verificationSent": "Bestätigungs-E-Mail gesendet",
   "goalsTitle": "Deine Ziele",
   "calorieGoalLabel": "Kalorienziel (kcal)",
   "gramsLabel": "{name} (g)",
@@ -200,7 +168,6 @@
   "myFoodsSection": "Meine Lebensmittel",
   "blsSection": "Grundlebensmittel (BLS)",
   "blsSource": "Quelle: Bundeslebensmittelschlüssel 4.0, Max Rubner-Institut",
-  "familyTag": "Familie",
   "noResults": "Kein Treffer – versuch den freien Eintrag",
   "sourceScanned": "gescannt",
   "kcalPer100": "{kcal} kcal / 100 g",
@@ -215,7 +182,7 @@
   "addButton": "Eintragen",
   "shortCarbs": "KH",
   "mealName": "Name der Mahlzeit",
-  "portionWeight": "Gewicht der Portion (g)",
+  "portionWeight": "Portion (g)",
   "kcalPortion": "Kalorien (kcal)",
   "customHint": "Werte für die ganze Portion. Die Mahlzeit wird als eigenes Lebensmittel gespeichert.",
   "saveAndLog": "Speichern & eintragen",
@@ -223,7 +190,7 @@
   "requiredField": "Pflichtfeld",
   "invalidNumber": "Bitte eine Zahl über 0 eingeben",
   "foodDbTitle": "Meine Lebensmittel",
-  "foodDbInfo": "Nur deine eigenen Einträge – globale Lebensmittel können nicht bearbeitet werden.",
+  "foodDbInfo": "Deine gespeicherten Lebensmittel – auch übernommene BLS- und Open-Food-Facts-Einträge.",
   "noOwnFoods": "Noch keine eigenen Lebensmittel.",
   "editFoodTitle": "Lebensmittel bearbeiten",
   "nameLabel": "Name",
@@ -250,24 +217,6 @@
   },
   "foodSaved": "{name} gespeichert",
   "@foodSaved": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "shareFamily": "Mit Familie teilen",
-  "unshareFamily": "Nicht mehr teilen",
-  "sharedWithFamily": "{name} wird mit der Familie geteilt",
-  "@sharedWithFamily": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "notSharedWithFamily": "{name} wird nicht mehr geteilt",
-  "@notSharedWithFamily": {
     "placeholders": {
       "name": {
         "type": "String"
@@ -360,14 +309,6 @@
   "female": "Frau",
   "ageLabel": "Alter (Jahre)",
   "heightLabel": "Größe (cm)",
-  "weightFromTracker": "Gewicht (aus Tracker): {kg}",
-  "@weightFromTracker": {
-    "placeholders": {
-      "kg": {
-        "type": "String"
-      }
-    }
-  },
   "activityLabel": "Aktivitätslevel",
   "activitySedentary": "Kaum Bewegung (Bürojob)",
   "activityLight": "Leicht aktiv (1–3× Sport/Woche)",
@@ -402,29 +343,13 @@
   "removeAvatar": "Profilbild entfernen",
   "avatarUpdated": "Profilbild aktualisiert",
   "avatarTooBig": "Bild zu groß (max. 5 MB)",
-  "changeUsername": "Benutzername ändern",
-  "newUsername": "Neuer Benutzername",
-  "usernameChanged": "Benutzername geändert",
-  "changePassword": "Passwort ändern",
-  "currentPassword": "Aktuelles Passwort",
-  "newPassword": "Neues Passwort",
-  "confirmPassword": "Neues Passwort wiederholen",
-  "passwordMismatch": "Passwörter stimmen nicht überein",
-  "passwordChanged": "Passwort geändert",
+  "changeUsername": "Name ändern",
+  "newUsername": "Dein Name",
+  "usernameChanged": "Name gespeichert",
   "exportTitle": "Daten exportieren",
-  "exportSub": "Alle deine Daten als CSV speichern",
+  "exportSub": "Tagebuch und Gewicht als CSV speichern",
   "exportSaved": "Export gespeichert",
-  "feedbackTitle": "Feedback an CrashBandit",
-  "feedbackSub": "Lob, Wünsche oder Fehler melden",
-  "feedbackHint": "Was gefällt dir? Was könnte besser sein? Fehler gefunden?",
-  "feedbackMin": "Mindestens 5 Zeichen",
-  "feedbackThanks": "Danke für dein Feedback!",
-  "send": "Senden",
-  "logout": "Abmelden",
-  "logoutSub": "Von diesem Gerät abmelden",
-  "deleteAccount": "Konto löschen",
-  "deleteAccountSub": "Alle Daten unwiderruflich löschen",
-  "deleteWarning": "Diese Aktion ist unwiderruflich. Alle deine Einträge, Lebensmittel und Gewichte werden gelöscht.",
+  "deleteWarning": "Diese Aktion ist unwiderruflich. Alle Einträge, Lebensmittel, Vorlagen und Gewichte auf diesem Gerät werden gelöscht. Speichere vorher eine Sicherung, wenn du sie behalten willst.",
   "deleteConfirmWord": "LÖSCHEN",
   "deleteConfirmLabel": "Zur Bestätigung {word} eingeben",
   "@deleteConfirmLabel": {
@@ -438,5 +363,37 @@
   "themeTitle": "Darstellung",
   "themeSystem": "System",
   "themeLight": "Hell",
-  "themeDark": "Dunkel"
+  "themeDark": "Dunkel",
+  "greetingNoName": "Hallo!",
+  "profileTitle": "Mein Profil",
+  "localDataInfo": "Alle Daten bleiben auf diesem Gerät",
+  "backupTitle": "Sicherung speichern",
+  "backupSub": "Alle Daten als Datei sichern",
+  "backupSaved": "Sicherung gespeichert",
+  "restoreTitle": "Sicherung wiederherstellen",
+  "restoreSub": "Daten aus einer Sicherungsdatei laden",
+  "restoreConfirm": "Alle Daten auf diesem Gerät durch die Sicherung{date} ersetzen?",
+  "restoreAction": "Ersetzen",
+  "restoreDone": "Sicherung wiederhergestellt",
+  "backupInvalid": "Die Datei ist keine MacroBandit-Sicherung.",
+  "backupTooNew": "Die Sicherung stammt aus einer neueren App-Version. Bitte aktualisiere die App.",
+  "deleteAllData": "Alle Daten löschen",
+  "deleteAllDataSub": "Tagebuch, Lebensmittel, Vorlagen und Gewicht löschen",
+  "allDataDeleted": "Alle Daten gelöscht",
+  "dataSources": "Nährwerte: Bundeslebensmittelschlüssel 4.0 (Max Rubner-Institut) und Open Food Facts (ODbL)",
+  "@restoreConfirm": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "backupFrom": "vom {date}",
+  "@backupFrom": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

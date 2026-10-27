@@ -73,29 +73,31 @@ class _WeeklyCardState extends State<WeeklyCard> {
                           bottom: 84 * (goal / maxKcal),
                           child: Container(height: 1, color: c.border),
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            for (final d in w.days)
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 3),
-                                  child: FractionallySizedBox(
-                                    heightFactor: d.kcal > 0 ? math.max(d.kcal / maxKcal, 0.04) : 0.04,
-                                    alignment: Alignment.bottomCenter,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: d.kcal > 0 && goal > 0
-                                            ? kcalColor(d.kcal / goal * 100, low: c.kcalLow)
-                                            : c.idle,
-                                        borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
-                                        border: isToday(d.date) ? Border.all(color: c.today, width: 2) : null,
+                        Positioned.fill(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              for (final d in w.days)
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                                    child: FractionallySizedBox(
+                                      heightFactor: d.kcal > 0 ? math.max(d.kcal / maxKcal, 0.04) : 0.04,
+                                      alignment: Alignment.bottomCenter,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: d.kcal > 0 && goal > 0
+                                              ? kcalColor(d.kcal / goal * 100, low: c.kcalLow)
+                                              : c.idle,
+                                          borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                                          border: isToday(d.date) ? Border.all(color: c.today, width: 2) : null,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -132,10 +134,10 @@ class _WeeklyCardState extends State<WeeklyCard> {
                       TextSpan(
                         children: [
                           TextSpan(
-                            text: '${w.total.round()}',
+                            text: fmtNum(context, w.total, 0),
                             style: TextStyle(color: c.text, fontWeight: FontWeight.w800),
                           ),
-                          TextSpan(text: ' / ${w.goal.round()} kcal'),
+                          TextSpan(text: ' / ${fmtNum(context, w.goal, 0)} kcal'),
                         ],
                       ),
                       style: context.tt.labelMedium,

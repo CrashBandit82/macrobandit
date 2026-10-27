@@ -62,8 +62,7 @@ import 'app_localizations_en.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -71,8 +70,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -84,19 +82,15 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('de'),
-    Locale('en'),
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('de'), Locale('en')];
 
   /// No description provided for @appName.
   ///
@@ -155,134 +149,8 @@ abstract class AppLocalizations {
   /// No description provided for @errorOffline.
   ///
   /// In de, this message translates to:
-  /// **'Keine Verbindung zu macrobandit.at'**
+  /// **'Keine Internetverbindung'**
   String get errorOffline;
-
-  /// No description provided for @errorTooMany.
-  ///
-  /// In de, this message translates to:
-  /// **'Zu viele Versuche – bitte kurz warten'**
-  String get errorTooMany;
-
-  /// No description provided for @sessionExpired.
-  ///
-  /// In de, this message translates to:
-  /// **'Sitzung abgelaufen – bitte neu anmelden'**
-  String get sessionExpired;
-
-  /// No description provided for @authSubtitle.
-  ///
-  /// In de, this message translates to:
-  /// **'Dein persönlicher Makro-Tracker'**
-  String get authSubtitle;
-
-  /// No description provided for @emailLabel.
-  ///
-  /// In de, this message translates to:
-  /// **'E-Mail'**
-  String get emailLabel;
-
-  /// No description provided for @passwordLabel.
-  ///
-  /// In de, this message translates to:
-  /// **'Passwort'**
-  String get passwordLabel;
-
-  /// No description provided for @usernameLabel.
-  ///
-  /// In de, this message translates to:
-  /// **'Benutzername'**
-  String get usernameLabel;
-
-  /// No description provided for @passwordRulesHint.
-  ///
-  /// In de, this message translates to:
-  /// **'Mind. 8 Zeichen, Groß- und Kleinbuchstabe und eine Zahl'**
-  String get passwordRulesHint;
-
-  /// No description provided for @loginButton.
-  ///
-  /// In de, this message translates to:
-  /// **'Anmelden'**
-  String get loginButton;
-
-  /// No description provided for @registerButton.
-  ///
-  /// In de, this message translates to:
-  /// **'Konto erstellen'**
-  String get registerButton;
-
-  /// No description provided for @loginTab.
-  ///
-  /// In de, this message translates to:
-  /// **'Anmelden'**
-  String get loginTab;
-
-  /// No description provided for @registerTab.
-  ///
-  /// In de, this message translates to:
-  /// **'Registrieren'**
-  String get registerTab;
-
-  /// No description provided for @forgotPassword.
-  ///
-  /// In de, this message translates to:
-  /// **'Passwort vergessen?'**
-  String get forgotPassword;
-
-  /// No description provided for @forgotTitle.
-  ///
-  /// In de, this message translates to:
-  /// **'Passwort vergessen'**
-  String get forgotTitle;
-
-  /// No description provided for @forgotSubtitle.
-  ///
-  /// In de, this message translates to:
-  /// **'Wir schicken dir einen Link zum Zurücksetzen. Das neue Passwort setzt du auf macrobandit.at.'**
-  String get forgotSubtitle;
-
-  /// No description provided for @sendResetLink.
-  ///
-  /// In de, this message translates to:
-  /// **'Link senden'**
-  String get sendResetLink;
-
-  /// No description provided for @resetLinkSent.
-  ///
-  /// In de, this message translates to:
-  /// **'Falls die E-Mail existiert, wurde ein Link gesendet.'**
-  String get resetLinkSent;
-
-  /// No description provided for @registeredTitle.
-  ///
-  /// In de, this message translates to:
-  /// **'Fast geschafft!'**
-  String get registeredTitle;
-
-  /// No description provided for @registeredText.
-  ///
-  /// In de, this message translates to:
-  /// **'Wir haben eine Bestätigungs-E-Mail an {email} gesendet. Klicke auf „E-Mail bestätigen“ und melde dich danach hier an.'**
-  String registeredText(String email);
-
-  /// No description provided for @registeredSpam.
-  ///
-  /// In de, this message translates to:
-  /// **'Keine E-Mail erhalten? Prüfe deinen Spam-Ordner.'**
-  String get registeredSpam;
-
-  /// No description provided for @toLogin.
-  ///
-  /// In de, this message translates to:
-  /// **'Zur Anmeldung'**
-  String get toLogin;
-
-  /// No description provided for @authFooter.
-  ///
-  /// In de, this message translates to:
-  /// **'macrobandit.at · Deine Daten bleiben bei dir'**
-  String get authFooter;
 
   /// No description provided for @greeting.
   ///
@@ -305,7 +173,7 @@ abstract class AppLocalizations {
   /// No description provided for @tabAccount.
   ///
   /// In de, this message translates to:
-  /// **'Konto'**
+  /// **'Profil'**
   String get tabAccount;
 
   /// No description provided for @todayDate.
@@ -494,30 +362,6 @@ abstract class AppLocalizations {
   /// **'Produkt nicht gefunden. Bitte frei eintragen.'**
   String get productNotFound;
 
-  /// No description provided for @emailNotVerified.
-  ///
-  /// In de, this message translates to:
-  /// **'E-Mail nicht bestätigt'**
-  String get emailNotVerified;
-
-  /// No description provided for @emailNotVerifiedSub.
-  ///
-  /// In de, this message translates to:
-  /// **'Bitte bestätige deine E-Mail-Adresse.'**
-  String get emailNotVerifiedSub;
-
-  /// No description provided for @resend.
-  ///
-  /// In de, this message translates to:
-  /// **'Erneut senden'**
-  String get resend;
-
-  /// No description provided for @verificationSent.
-  ///
-  /// In de, this message translates to:
-  /// **'Bestätigungs-E-Mail gesendet'**
-  String get verificationSent;
-
   /// No description provided for @goalsTitle.
   ///
   /// In de, this message translates to:
@@ -632,12 +476,6 @@ abstract class AppLocalizations {
   /// **'Quelle: Bundeslebensmittelschlüssel 4.0, Max Rubner-Institut'**
   String get blsSource;
 
-  /// No description provided for @familyTag.
-  ///
-  /// In de, this message translates to:
-  /// **'Familie'**
-  String get familyTag;
-
   /// No description provided for @noResults.
   ///
   /// In de, this message translates to:
@@ -683,7 +521,7 @@ abstract class AppLocalizations {
   /// No description provided for @portionWeight.
   ///
   /// In de, this message translates to:
-  /// **'Gewicht der Portion (g)'**
+  /// **'Portion (g)'**
   String get portionWeight;
 
   /// No description provided for @kcalPortion.
@@ -731,7 +569,7 @@ abstract class AppLocalizations {
   /// No description provided for @foodDbInfo.
   ///
   /// In de, this message translates to:
-  /// **'Nur deine eigenen Einträge – globale Lebensmittel können nicht bearbeitet werden.'**
+  /// **'Deine gespeicherten Lebensmittel – auch übernommene BLS- und Open-Food-Facts-Einträge.'**
   String get foodDbInfo;
 
   /// No description provided for @noOwnFoods.
@@ -799,30 +637,6 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'{name} gespeichert'**
   String foodSaved(String name);
-
-  /// No description provided for @shareFamily.
-  ///
-  /// In de, this message translates to:
-  /// **'Mit Familie teilen'**
-  String get shareFamily;
-
-  /// No description provided for @unshareFamily.
-  ///
-  /// In de, this message translates to:
-  /// **'Nicht mehr teilen'**
-  String get unshareFamily;
-
-  /// No description provided for @sharedWithFamily.
-  ///
-  /// In de, this message translates to:
-  /// **'{name} wird mit der Familie geteilt'**
-  String sharedWithFamily(String name);
-
-  /// No description provided for @notSharedWithFamily.
-  ///
-  /// In de, this message translates to:
-  /// **'{name} wird nicht mehr geteilt'**
-  String notSharedWithFamily(String name);
 
   /// No description provided for @templatesEmpty.
   ///
@@ -1088,12 +902,6 @@ abstract class AppLocalizations {
   /// **'Größe (cm)'**
   String get heightLabel;
 
-  /// No description provided for @weightFromTracker.
-  ///
-  /// In de, this message translates to:
-  /// **'Gewicht (aus Tracker): {kg}'**
-  String weightFromTracker(String kg);
-
   /// No description provided for @activityLabel.
   ///
   /// In de, this message translates to:
@@ -1217,56 +1025,20 @@ abstract class AppLocalizations {
   /// No description provided for @changeUsername.
   ///
   /// In de, this message translates to:
-  /// **'Benutzername ändern'**
+  /// **'Name ändern'**
   String get changeUsername;
 
   /// No description provided for @newUsername.
   ///
   /// In de, this message translates to:
-  /// **'Neuer Benutzername'**
+  /// **'Dein Name'**
   String get newUsername;
 
   /// No description provided for @usernameChanged.
   ///
   /// In de, this message translates to:
-  /// **'Benutzername geändert'**
+  /// **'Name gespeichert'**
   String get usernameChanged;
-
-  /// No description provided for @changePassword.
-  ///
-  /// In de, this message translates to:
-  /// **'Passwort ändern'**
-  String get changePassword;
-
-  /// No description provided for @currentPassword.
-  ///
-  /// In de, this message translates to:
-  /// **'Aktuelles Passwort'**
-  String get currentPassword;
-
-  /// No description provided for @newPassword.
-  ///
-  /// In de, this message translates to:
-  /// **'Neues Passwort'**
-  String get newPassword;
-
-  /// No description provided for @confirmPassword.
-  ///
-  /// In de, this message translates to:
-  /// **'Neues Passwort wiederholen'**
-  String get confirmPassword;
-
-  /// No description provided for @passwordMismatch.
-  ///
-  /// In de, this message translates to:
-  /// **'Passwörter stimmen nicht überein'**
-  String get passwordMismatch;
-
-  /// No description provided for @passwordChanged.
-  ///
-  /// In de, this message translates to:
-  /// **'Passwort geändert'**
-  String get passwordChanged;
 
   /// No description provided for @exportTitle.
   ///
@@ -1277,7 +1049,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportSub.
   ///
   /// In de, this message translates to:
-  /// **'Alle deine Daten als CSV speichern'**
+  /// **'Tagebuch und Gewicht als CSV speichern'**
   String get exportSub;
 
   /// No description provided for @exportSaved.
@@ -1286,70 +1058,10 @@ abstract class AppLocalizations {
   /// **'Export gespeichert'**
   String get exportSaved;
 
-  /// No description provided for @feedbackTitle.
-  ///
-  /// In de, this message translates to:
-  /// **'Feedback an CrashBandit'**
-  String get feedbackTitle;
-
-  /// No description provided for @feedbackSub.
-  ///
-  /// In de, this message translates to:
-  /// **'Lob, Wünsche oder Fehler melden'**
-  String get feedbackSub;
-
-  /// No description provided for @feedbackHint.
-  ///
-  /// In de, this message translates to:
-  /// **'Was gefällt dir? Was könnte besser sein? Fehler gefunden?'**
-  String get feedbackHint;
-
-  /// No description provided for @feedbackMin.
-  ///
-  /// In de, this message translates to:
-  /// **'Mindestens 5 Zeichen'**
-  String get feedbackMin;
-
-  /// No description provided for @feedbackThanks.
-  ///
-  /// In de, this message translates to:
-  /// **'Danke für dein Feedback!'**
-  String get feedbackThanks;
-
-  /// No description provided for @send.
-  ///
-  /// In de, this message translates to:
-  /// **'Senden'**
-  String get send;
-
-  /// No description provided for @logout.
-  ///
-  /// In de, this message translates to:
-  /// **'Abmelden'**
-  String get logout;
-
-  /// No description provided for @logoutSub.
-  ///
-  /// In de, this message translates to:
-  /// **'Von diesem Gerät abmelden'**
-  String get logoutSub;
-
-  /// No description provided for @deleteAccount.
-  ///
-  /// In de, this message translates to:
-  /// **'Konto löschen'**
-  String get deleteAccount;
-
-  /// No description provided for @deleteAccountSub.
-  ///
-  /// In de, this message translates to:
-  /// **'Alle Daten unwiderruflich löschen'**
-  String get deleteAccountSub;
-
   /// No description provided for @deleteWarning.
   ///
   /// In de, this message translates to:
-  /// **'Diese Aktion ist unwiderruflich. Alle deine Einträge, Lebensmittel und Gewichte werden gelöscht.'**
+  /// **'Diese Aktion ist unwiderruflich. Alle Einträge, Lebensmittel, Vorlagen und Gewichte auf diesem Gerät werden gelöscht. Speichere vorher eine Sicherung, wenn du sie behalten willst.'**
   String get deleteWarning;
 
   /// No description provided for @deleteConfirmWord.
@@ -1393,10 +1105,117 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Dunkel'**
   String get themeDark;
+
+  /// No description provided for @greetingNoName.
+  ///
+  /// In de, this message translates to:
+  /// **'Hallo!'**
+  String get greetingNoName;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Mein Profil'**
+  String get profileTitle;
+
+  /// No description provided for @localDataInfo.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Daten bleiben auf diesem Gerät'**
+  String get localDataInfo;
+
+  /// No description provided for @backupTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Sicherung speichern'**
+  String get backupTitle;
+
+  /// No description provided for @backupSub.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Daten als Datei sichern'**
+  String get backupSub;
+
+  /// No description provided for @backupSaved.
+  ///
+  /// In de, this message translates to:
+  /// **'Sicherung gespeichert'**
+  String get backupSaved;
+
+  /// No description provided for @restoreTitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Sicherung wiederherstellen'**
+  String get restoreTitle;
+
+  /// No description provided for @restoreSub.
+  ///
+  /// In de, this message translates to:
+  /// **'Daten aus einer Sicherungsdatei laden'**
+  String get restoreSub;
+
+  /// No description provided for @restoreConfirm.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Daten auf diesem Gerät durch die Sicherung{date} ersetzen?'**
+  String restoreConfirm(String date);
+
+  /// No description provided for @restoreAction.
+  ///
+  /// In de, this message translates to:
+  /// **'Ersetzen'**
+  String get restoreAction;
+
+  /// No description provided for @restoreDone.
+  ///
+  /// In de, this message translates to:
+  /// **'Sicherung wiederhergestellt'**
+  String get restoreDone;
+
+  /// No description provided for @backupInvalid.
+  ///
+  /// In de, this message translates to:
+  /// **'Die Datei ist keine MacroBandit-Sicherung.'**
+  String get backupInvalid;
+
+  /// No description provided for @backupTooNew.
+  ///
+  /// In de, this message translates to:
+  /// **'Die Sicherung stammt aus einer neueren App-Version. Bitte aktualisiere die App.'**
+  String get backupTooNew;
+
+  /// No description provided for @deleteAllData.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Daten löschen'**
+  String get deleteAllData;
+
+  /// No description provided for @deleteAllDataSub.
+  ///
+  /// In de, this message translates to:
+  /// **'Tagebuch, Lebensmittel, Vorlagen und Gewicht löschen'**
+  String get deleteAllDataSub;
+
+  /// No description provided for @allDataDeleted.
+  ///
+  /// In de, this message translates to:
+  /// **'Alle Daten gelöscht'**
+  String get allDataDeleted;
+
+  /// No description provided for @dataSources.
+  ///
+  /// In de, this message translates to:
+  /// **'Nährwerte: Bundeslebensmittelschlüssel 4.0 (Max Rubner-Institut) und Open Food Facts (ODbL)'**
+  String get dataSources;
+
+  /// No description provided for @backupFrom.
+  ///
+  /// In de, this message translates to:
+  /// **'vom {date}'**
+  String backupFrom(String date);
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -1405,8 +1224,7 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['de', 'en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['de', 'en'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;

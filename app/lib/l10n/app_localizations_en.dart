@@ -37,74 +37,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorGeneric => 'Something went wrong';
 
   @override
-  String get errorOffline => 'No connection to macrobandit.at';
-
-  @override
-  String get errorTooMany => 'Too many attempts – please wait a moment';
-
-  @override
-  String get sessionExpired => 'Session expired – please sign in again';
-
-  @override
-  String get authSubtitle => 'Your personal macro tracker';
-
-  @override
-  String get emailLabel => 'Email';
-
-  @override
-  String get passwordLabel => 'Password';
-
-  @override
-  String get usernameLabel => 'Username';
-
-  @override
-  String get passwordRulesHint =>
-      'At least 8 characters, upper and lower case and a digit';
-
-  @override
-  String get loginButton => 'Sign in';
-
-  @override
-  String get registerButton => 'Create account';
-
-  @override
-  String get loginTab => 'Sign in';
-
-  @override
-  String get registerTab => 'Register';
-
-  @override
-  String get forgotPassword => 'Forgot password?';
-
-  @override
-  String get forgotTitle => 'Forgot password';
-
-  @override
-  String get forgotSubtitle =>
-      'We will send you a reset link. You set the new password on macrobandit.at.';
-
-  @override
-  String get sendResetLink => 'Send link';
-
-  @override
-  String get resetLinkSent => 'If the email exists, a link has been sent.';
-
-  @override
-  String get registeredTitle => 'Almost done!';
-
-  @override
-  String registeredText(String email) {
-    return 'We sent a confirmation email to $email. Click \"Confirm email\", then sign in here.';
-  }
-
-  @override
-  String get registeredSpam => 'No email? Check your spam folder.';
-
-  @override
-  String get toLogin => 'To sign in';
-
-  @override
-  String get authFooter => 'macrobandit.at · Your data stays with you';
+  String get errorOffline => 'No internet connection';
 
   @override
   String greeting(String name) {
@@ -118,7 +51,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tabWeight => 'Weight';
 
   @override
-  String get tabAccount => 'Account';
+  String get tabAccount => 'Profile';
 
   @override
   String todayDate(String date) {
@@ -196,12 +129,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String entryCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count entries',
-      one: '1 entry',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count entries', one: '1 entry');
     return '$_temp0';
   }
 
@@ -238,18 +166,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get productNotFound => 'Product not found. Please enter it manually.';
-
-  @override
-  String get emailNotVerified => 'Email not confirmed';
-
-  @override
-  String get emailNotVerifiedSub => 'Please confirm your email address.';
-
-  @override
-  String get resend => 'Resend';
-
-  @override
-  String get verificationSent => 'Confirmation email sent';
 
   @override
   String get goalsTitle => 'Your goals';
@@ -312,11 +228,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get blsSection => 'Basic foods (BLS)';
 
   @override
-  String get blsSource =>
-      'Source: Bundeslebensmittelschlüssel 4.0, Max Rubner-Institut';
-
-  @override
-  String get familyTag => 'Family';
+  String get blsSource => 'Source: Bundeslebensmittelschlüssel 4.0, Max Rubner-Institut';
 
   @override
   String get noResults => 'No match – try a custom entry';
@@ -342,14 +254,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealName => 'Meal name';
 
   @override
-  String get portionWeight => 'Portion weight (g)';
+  String get portionWeight => 'Portion (g)';
 
   @override
   String get kcalPortion => 'Calories (kcal)';
 
   @override
-  String get customHint =>
-      'Values for the whole portion. The meal is saved as your own food.';
+  String get customHint => 'Values for the whole portion. The meal is saved as your own food.';
 
   @override
   String get saveAndLog => 'Save & log';
@@ -367,8 +278,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get foodDbTitle => 'My foods';
 
   @override
-  String get foodDbInfo =>
-      'Only your own entries – global foods cannot be edited.';
+  String get foodDbInfo => 'Your saved foods – including entries taken from the BLS and Open Food Facts.';
 
   @override
   String get noOwnFoods => 'No own foods yet.';
@@ -410,22 +320,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get shareFamily => 'Share with family';
-
-  @override
-  String get unshareFamily => 'Stop sharing';
-
-  @override
-  String sharedWithFamily(String name) {
-    return '$name is shared with the family';
-  }
-
-  @override
-  String notSharedWithFamily(String name) {
-    return '$name is no longer shared';
-  }
-
-  @override
   String get templatesEmpty => 'No templates yet. Create your first one!';
 
   @override
@@ -462,8 +356,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get templateAmountError =>
-      'Please enter an amount above 0 g for every food';
+  String get templateAmountError => 'Please enter an amount above 0 g for every food';
 
   @override
   String get templateNeedsItems => 'Name and at least one food required';
@@ -493,12 +386,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String monthDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count days',
-      one: '1 day',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count days', one: '1 day');
     return '$_temp0';
   }
 
@@ -577,11 +465,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get heightLabel => 'Height (cm)';
 
   @override
-  String weightFromTracker(String kg) {
-    return 'Weight (from tracker): $kg';
-  }
-
-  @override
   String get activityLabel => 'Activity level';
 
   @override
@@ -646,75 +529,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get avatarTooBig => 'Image too large (max. 5 MB)';
 
   @override
-  String get changeUsername => 'Change username';
+  String get changeUsername => 'Change name';
 
   @override
-  String get newUsername => 'New username';
+  String get newUsername => 'Your name';
 
   @override
-  String get usernameChanged => 'Username changed';
-
-  @override
-  String get changePassword => 'Change password';
-
-  @override
-  String get currentPassword => 'Current password';
-
-  @override
-  String get newPassword => 'New password';
-
-  @override
-  String get confirmPassword => 'Repeat new password';
-
-  @override
-  String get passwordMismatch => 'Passwords do not match';
-
-  @override
-  String get passwordChanged => 'Password changed';
+  String get usernameChanged => 'Name saved';
 
   @override
   String get exportTitle => 'Export data';
 
   @override
-  String get exportSub => 'Save all your data as CSV';
+  String get exportSub => 'Save diary and weight as CSV';
 
   @override
   String get exportSaved => 'Export saved';
 
   @override
-  String get feedbackTitle => 'Feedback to CrashBandit';
-
-  @override
-  String get feedbackSub => 'Praise, wishes or bug reports';
-
-  @override
-  String get feedbackHint =>
-      'What do you like? What could be better? Found a bug?';
-
-  @override
-  String get feedbackMin => 'At least 5 characters';
-
-  @override
-  String get feedbackThanks => 'Thanks for your feedback!';
-
-  @override
-  String get send => 'Send';
-
-  @override
-  String get logout => 'Sign out';
-
-  @override
-  String get logoutSub => 'Sign out on this device';
-
-  @override
-  String get deleteAccount => 'Delete account';
-
-  @override
-  String get deleteAccountSub => 'Delete all data permanently';
-
-  @override
   String get deleteWarning =>
-      'This cannot be undone. All your entries, foods and weights will be deleted.';
+      'This cannot be undone. All entries, foods, templates and weights on this device will be deleted. Save a backup first if you want to keep them.';
 
   @override
   String get deleteConfirmWord => 'DELETE';
@@ -738,4 +572,63 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get themeDark => 'Dark';
+
+  @override
+  String get greetingNoName => 'Hello!';
+
+  @override
+  String get profileTitle => 'My profile';
+
+  @override
+  String get localDataInfo => 'All data stays on this device';
+
+  @override
+  String get backupTitle => 'Save backup';
+
+  @override
+  String get backupSub => 'Save all data as a file';
+
+  @override
+  String get backupSaved => 'Backup saved';
+
+  @override
+  String get restoreTitle => 'Restore backup';
+
+  @override
+  String get restoreSub => 'Load data from a backup file';
+
+  @override
+  String restoreConfirm(String date) {
+    return 'Replace all data on this device with the backup$date?';
+  }
+
+  @override
+  String get restoreAction => 'Replace';
+
+  @override
+  String get restoreDone => 'Backup restored';
+
+  @override
+  String get backupInvalid => 'This file is not a MacroBandit backup.';
+
+  @override
+  String get backupTooNew => 'This backup is from a newer app version. Please update the app.';
+
+  @override
+  String get deleteAllData => 'Delete all data';
+
+  @override
+  String get deleteAllDataSub => 'Delete diary, foods, templates and weight';
+
+  @override
+  String get allDataDeleted => 'All data deleted';
+
+  @override
+  String get dataSources =>
+      'Nutrition data: Bundeslebensmittelschlüssel 4.0 (Max Rubner-Institut) and Open Food Facts (ODbL)';
+
+  @override
+  String backupFrom(String date) {
+    return 'from $date';
+  }
 }

@@ -1,0 +1,1 @@
+Offline und ohne Konto: Alle Daten bleiben auf dem Gerät. Grundlebensmittel (BLS 4.0) in der App, Barcode und Online-Suche direkt bei Open Food Facts. Neu: Sicherung und Wiederherstellung als Datei, Gewicht im TDEE-Rechner, Suche versteht ae/oe/ue. Behoben: Wochen-Diagramm, Darstellung bei großer Schrift.

@@ -1,14 +1,15 @@
-MacroBandit ist ein kostenloser und werbefreier Makro- und Kalorien-Tracker für Sportler. Die native App arbeitet mit deinem Konto auf <a href="https://macrobandit.at">macrobandit.at</a>; ein Konto ist nötig und kann in der App angelegt werden.
+MacroBandit ist ein kostenloser und werbefreier Makro- und Kalorien-Tracker. Er funktioniert offline und ohne Konto: Alle Daten bleiben auf deinem Gerät.
 
 <b>Funktionen</b>
 <ul>
-<li>Barcode-Scanner (zxing, ohne Google-Dienste) – Nährwerte von Open Food Facts</li>
-<li>Schnelleingabe wie „200g Milch 3,5“, Suche in eigenen Lebensmitteln, im Bundeslebensmittelschlüssel (BLS 4.0) und online</li>
-<li>Grammgenaues Eintragen, Kalorien und Makros sofort berechnet</li>
+<li>Schnelleingabe wie „200g Milch 3,5“ – Menge wird erkannt, Kalorien und Makros sofort berechnet</li>
+<li>7 140 Grundlebensmittel offline aus dem Bundeslebensmittelschlüssel (BLS 4.0, Max Rubner-Institut)</li>
+<li>Barcode-Scanner (zxing, ohne Google-Dienste) und Online-Suche – Produktdaten von Open Food Facts, nur auf Anfrage</li>
 <li>Eigene Lebensmittel und Mahlzeiten-Vorlagen mit einem Tipp</li>
-<li>TDEE-Rechner und persönliche Makro-Ziele</li>
 <li>Wochen- und Monatsstatistik, Gewichts-Tracker mit Verlauf</li>
-<li>Datenexport (CSV), Deutsch und Englisch, helles und dunkles Design</li>
+<li>TDEE-Rechner und persönliche Makro-Ziele</li>
+<li>Sicherung und Wiederherstellung als Datei, CSV-Export</li>
+<li>Deutsch und Englisch, helles und dunkles Design</li>
 </ul>
 
-App und Server-Software sind freie Software unter der GNU AGPL-3.0.
+Die App ist freie Software unter der GNU AGPL-3.0.

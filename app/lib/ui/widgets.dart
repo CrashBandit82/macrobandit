@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -14,10 +16,13 @@ extension ContextX on BuildContext {
 }
 
 /// Number with up to [digits] decimals in the app locale ("3,5" in German).
+/// Thousands are grouped from five digits on ("1298", "15.400"), like the
+/// plain kcal values elsewhere.
 String fmtNum(BuildContext context, num v, [int digits = 1]) {
   final f = NumberFormat.decimalPattern(Localizations.localeOf(context).toLanguageTag())
     ..minimumFractionDigits = 0
     ..maximumFractionDigits = digits;
+  if (v.abs() < 10000) f.turnOffGrouping();
   return f.format(v);
 }
 
@@ -28,7 +33,6 @@ String errorText(BuildContext context, Object error) {
   final t = context.t;
   if (error is ApiException) {
     if (error.offline) return t.errorOffline;
-    if (error.status == 429) return t.errorTooMany;
     if (error.detail != null && error.detail!.isNotEmpty) return error.detail!;
   }
   return t.errorGeneric;
@@ -167,9 +171,7 @@ class GradientButton extends StatelessWidget {
       opacity: enabled ? 1 : 0.5,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          gradient: session.state == SessionState.signedIn
-              ? Palette.userGradient(session.user.id)
-              : Palette.brandGradient,
+          gradient: session.ready ? Palette.userGradient(session.user.id) : Palette.brandGradient,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Material(
@@ -291,7 +293,7 @@ String? Function(String?) positiveNumber(BuildContext context, {bool required = 
 String? Function(String?) requiredText(BuildContext context) =>
     (v) => (v ?? '').trim().isEmpty ? context.t.requiredField : null;
 
-/// Profile picture from macrobandit.at, or the user's gradient with a person icon.
+/// Profile picture, or the user's gradient with a person icon.
 class UserAvatar extends StatelessWidget {
   const UserAvatar({super.key, required this.user, this.size = 64});
 
@@ -303,8 +305,8 @@ class UserAvatar extends StatelessWidget {
     final path = user.avatarPath;
     if (path != null) {
       return ClipOval(
-        child: Image.network(
-          '$serverOrigin$path',
+        child: Image.file(
+          File(path),
           width: size,
           height: size,
           cacheWidth: (size * MediaQuery.devicePixelRatioOf(context)).round(),
@@ -323,6 +325,13 @@ class UserAvatar extends StatelessWidget {
     child: Icon(Icons.person, color: Colors.white, size: size * 0.53),
   );
 }
+
+/// Segment of a [SegmentedButton] whose label shrinks instead of wrapping
+/// with large system fonts.
+ButtonSegment<T> segment<T>(T value, String label) => ButtonSegment(
+  value: value,
+  label: FittedBox(fit: BoxFit.scaleDown, child: Text(label, maxLines: 1)),
+);
 
 /// Limits content to a readable width on tablets and in landscape.
 class PageWidth extends StatelessWidget {

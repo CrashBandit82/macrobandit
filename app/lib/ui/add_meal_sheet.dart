@@ -223,9 +223,9 @@ class _AddMealSheetState extends State<AddMealSheet> {
             if (_pick == null) ...[
               SegmentedButton<_Tab>(
                 segments: [
-                  ButtonSegment(value: _Tab.search, label: Text(t.tabSearch)),
-                  ButtonSegment(value: _Tab.custom, label: Text(t.tabCustom)),
-                  ButtonSegment(value: _Tab.templates, label: Text(t.tabTemplates)),
+                  segment(_Tab.search, t.tabSearch),
+                  segment(_Tab.custom, t.tabCustom),
+                  segment(_Tab.templates, t.tabTemplates),
                 ],
                 selected: {_tab},
                 showSelectedIcon: false,
@@ -362,7 +362,6 @@ class _AddMealSheetState extends State<AddMealSheet> {
     final t = context.t;
     final c = context.c;
     final q = _quick;
-    final userId = context.session.user.id;
     final small = context.tt.bodySmall!;
     return [
       box([
@@ -444,7 +443,6 @@ class _AddMealSheetState extends State<AddMealSheet> {
                 sub: [
                   if (f.brand != null && f.brand!.isNotEmpty) f.brand!,
                   if (f.useCount > 0) '${f.useCount}×',
-                  if (f.isFamily && f.userId != userId) t.familyTag,
                 ].join(' · '),
                 kcal: f.kcal,
                 onTap: () => _choose(Pick.own(f)),
@@ -513,7 +511,7 @@ class _AddMealSheetState extends State<AddMealSheet> {
           const SizedBox(height: 10),
           pair(field(_cGrams, t.portionWeight, required: true), field(_cKcal, t.kcalPortion, required: true)),
           const SizedBox(height: 10),
-          pair(field(_cProtein, t.gramsLabel(t.macroProtein)), field(_cCarbs, t.gramsLabel(t.macroCarbs))),
+          pair(field(_cProtein, t.gramsLabel(t.macroProtein)), field(_cCarbs, t.gramsLabel(t.shortCarbs))),
           const SizedBox(height: 10),
           pair(field(_cFat, t.gramsLabel(t.macroFat)), field(_cFiber, t.gramsLabel(t.macroFiber))),
           const SizedBox(height: 18),

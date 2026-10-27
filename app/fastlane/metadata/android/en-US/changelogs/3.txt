@@ -1,0 +1,1 @@
+Offline and without an account: all data stays on the device. Basic foods (BLS 4.0) built in, barcode and online search directly at Open Food Facts. New: backup and restore as a file, weight field in the TDEE calculator, search accepts ae/oe/ue for umlauts. Fixed: weekly chart, layout with large fonts.

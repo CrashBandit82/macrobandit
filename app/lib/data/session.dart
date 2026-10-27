@@ -1,30 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'api.dart';
+import 'db.dart';
 import 'models.dart';
 
-enum SessionState { starting, offline, signedOut, signedIn }
-
-/// Signed-in user and the API client; the app rebuilds on changes.
+/// Local profile and the data access; the app rebuilds on changes.
 class Session extends ChangeNotifier {
-  Session(this.api) {
-    api.onSessionExpired = () {
-      if (state == SessionState.signedIn) expired = true;
-      _set(SessionState.signedOut, null);
-    };
-  }
-
-  final Api api;
-  SessionState state = SessionState.starting;
+  Api? _api;
   User? _user;
 
-  /// true when the last sign-out came from an expired refresh token.
-  bool expired = false;
+  /// Set when the database could not be opened.
+  Object? error;
 
+  bool get ready => _user != null;
+  Api get api => _api!;
   User get user => _user!;
 
-  /// Light/dark choice of this device (not synced with the web app).
+  /// Light/dark choice of this device.
   ThemeMode themeMode = ThemeMode.system;
   static const _prefs = FlutterSecureStorage();
 
@@ -34,35 +29,30 @@ class Session extends ChangeNotifier {
     await _prefs.write(key: 'theme_mode', value: mode.name);
   }
 
-  void _set(SessionState s, User? u) {
-    state = s;
-    _user = u;
+  Future<void> start() async {
+    try {
+      final mode = await _prefs.read(key: 'theme_mode');
+      themeMode = ThemeMode.values.firstWhere((m) => m.name == mode, orElse: () => ThemeMode.system);
+    } on Object {
+      // keep the system theme
+    }
+    try {
+      final dir = await getApplicationSupportDirectory();
+      _api = Api(await openAppDatabase(), filesDir: dir.path, loadBls: () => rootBundle.loadString('assets/bls.tsv'));
+      _user = await _api!.me();
+    } on Object catch (e) {
+      error = e;
+    }
     notifyListeners();
   }
 
-  Future<void> restore() async {
-    _set(SessionState.starting, null);
-    final mode = await _prefs.read(key: 'theme_mode');
-    themeMode = ThemeMode.values.firstWhere((m) => m.name == mode, orElse: () => ThemeMode.system);
-    await api.loadTokens();
-    if (!api.hasTokens) return _set(SessionState.signedOut, null);
-    try {
-      _set(SessionState.signedIn, await api.me());
-    } on ApiException catch (e) {
-      // 401 already signed out via onSessionExpired
-      if (e.status != 401) _set(e.offline ? SessionState.offline : SessionState.signedOut, null);
-    }
-  }
+  /// Bumped when all data was replaced (backup restored, everything deleted),
+  /// so the screens drop their loaded state.
+  int dataRevision = 0;
 
-  Future<void> login(String email, String password) async {
-    await api.login(email.trim(), password);
-    expired = false;
-    _set(SessionState.signedIn, await api.me());
-  }
-
-  Future<void> logout() async {
-    await api.clearTokens();
-    _set(SessionState.signedOut, null);
+  Future<void> dataReplaced() async {
+    dataRevision++;
+    await reloadUser();
   }
 
   void updateUser(User u) {

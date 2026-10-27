@@ -1,104 +1,50 @@
 <p align="right"><b>English</b> · <a href="README.de.md">Deutsch</a></p>
 
-<p align="center"><img src="frontend/public/logo.png" width="96" alt="MacroBandit"></p>
+<p align="center"><img src="logo.png" width="96" alt="MacroBandit"></p>
 
 <h1 align="center">MacroBandit</h1>
 
 <p align="center">
-  Free, ad-free macro &amp; calorie tracker for athletes – installable as a PWA.<br>
-  Live at <a href="https://macrobandit.at">macrobandit.at</a>
+  Free, ad-free macro &amp; calorie tracker for Android.<br>
+  Works offline, no account, all data stays on your phone.
+</p>
+
+<p align="center">
+  <img src="app/fastlane/metadata/android/de-DE/images/phoneScreenshots/1.png" width="200" alt="Today">
+  <img src="app/fastlane/metadata/android/de-DE/images/phoneScreenshots/4.png" width="200" alt="Search">
+  <img src="app/fastlane/metadata/android/de-DE/images/phoneScreenshots/3.png" width="200" alt="Month">
+  <img src="app/fastlane/metadata/android/de-DE/images/phoneScreenshots/6.png" width="200" alt="Weight">
 </p>
 
 ---
 
 ## Features
 
-- **Barcode scanner** – scan products with the phone camera; nutrition data comes from Open Food Facts
-- **Gram-precise logging** – every entry in grams, calories and macros are calculated instantly
+- **No account, no server** – everything is stored on the device (SQLite)
+- **Quick entry** like `200g milk 3.5` – amount detected, calories and macros calculated instantly
+- **7,140 basic foods offline** from the German food database BLS 4.0 (Max Rubner-Institut)
+- **Barcode scanner** (zxing, no Google services) and online search – product data from Open Food Facts; the only network access, on request only
 - **Own foods & meal templates** – save favourites and whole meals, apply them with one tap
-- **TDEE calculator** – daily energy need (Mifflin-St Jeor) and personal macro goals
-- **Weekly & monthly reports** – totals, averages and goal achievement
-- **Weight tracker** – log body weight and follow the trend
-- **Reminders** – optional web push notification if nothing was logged yet
-- **Accounts** – registration with e-mail verification, password reset, avatar, data export, account deletion
-- **Admin panel** – user management, broadcast e-mail, inactivity reminders, statistics
-- **PWA** – installable on Android/iOS, works offline-tolerant, update banner for new versions
-- **Android app** – native Flutter app in [`app/`](app/) (no Google services), same account as the web app
-- **German & English**, light & dark theme
+- **Weekly & monthly statistics** – totals, averages, goal achievement
+- **Weight tracker** with history and 7-day trend
+- **TDEE calculator** (Mifflin-St Jeor) – take the result as your calorie goal
+- **Backup & restore** as a JSON file, CSV export
+- German & English, light & dark theme
 
-## Tech stack
+## Download
 
-| Part | Technology |
-|---|---|
-| Frontend | React, Vite, Tailwind CSS, i18next, Service Worker |
-| Backend | Python, FastAPI, SQLAlchemy |
-| Database | PostgreSQL |
-| Web server | nginx (serves the built frontend, proxies `/api` to the backend) |
+Signed APKs are on the [releases page](https://github.com/CrashBandit82/macrobandit/releases)
+(`arm64-v8a` fits almost every current phone). An F-Droid release is in progress.
 
-## Project layout
+## Build
 
-```
-backend/            FastAPI app (main.py, routers/, models.py)
-  send_reminders.py push reminders (run every minute via cron)
-  import_bls.py     optional import of the German food database (BLS)
-frontend/           React app (src/, public/, vite.config.js)
-nginx.conf          example nginx site
-deploy.sh           build frontend + restart backend
-```
+The app lives in [`app/`](app/) – see [app/README.md](app/README.md).
 
-## Setup
+## Data sources
 
-### Requirements
-- Python 3.11+, Node.js 20+, PostgreSQL 15+, nginx
-
-### Backend
-
-```bash
-cd backend
-python3 -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
-uvicorn main:app --host 127.0.0.1 --port 8000
-```
-
-The tables are created automatically on first start. Configuration is read from environment variables:
-
-| Variable | Purpose |
-|---|---|
-| `DATABASE_URL` | e.g. `postgresql://macrobandit:<password>@localhost/macrobandit` |
-| `SECRET_KEY`, `REFRESH_SECRET_KEY` | JWT signing keys – long random values |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` | e-mail for verification / password reset (optional) |
-| `NOTIFY_EMAIL` | receives new-registration and feedback notifications (optional) |
-| `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_CLAIMS` | web push reminders (optional) |
-
-Run the backend as a systemd service in production.
-
-### Frontend
-
-```bash
-cd frontend
-npm ci
-npm run dev      # development: http://localhost:5173
-npm run build    # production build in frontend/dist
-```
-
-Point nginx at `frontend/dist` and proxy `/api/` to `127.0.0.1:8000` (see `nginx.conf`). Put TLS in front (Let's Encrypt or your reverse proxy).
-
-### Deploying a new version
-
-1. Raise `version` in `frontend/package.json` (semantic versioning).
-2. Run `deploy.sh` – it stamps the service worker, builds the frontend and restarts the backend.
-3. Users get an update banner on their next visit.
-
-## Backups
-
-Back up the PostgreSQL database regularly, e.g. daily:
-
-```bash
-pg_dump macrobandit > backup/db_$(date +%Y%m%d).sql
-```
+- Max Rubner-Institut (2025): Bundeslebensmittelschlüssel (BLS), Version 4.0 – Deutsche Nährstoffdatenbank. Karlsruhe. DOI: [10.25826/Data20251217-134202-0](https://doi.org/10.25826/Data20251217-134202-0) – free to use, also for app development.
+- [Open Food Facts](https://world.openfoodfacts.org) – Open Database License (ODbL).
 
 ## License
 
-Copyright (C) 2026 CrashBandit82
-
-MacroBandit is free software: you can redistribute it and/or modify it under the terms of the **GNU Affero General Public License v3.0** as published by the Free Software Foundation. If you run a modified version as a network service, you must make its source code available to its users. See [LICENSE](LICENSE) for the full text.
+[GNU AGPL-3.0](LICENSE) – © CrashBandit82

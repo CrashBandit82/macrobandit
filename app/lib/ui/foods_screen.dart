@@ -4,7 +4,7 @@ import '../data/models.dart';
 import 'theme.dart';
 import 'widgets.dart';
 
-/// The user's own foods: edit, delete, share with the family.
+/// The user's own foods: edit, delete.
 class FoodsScreen extends StatefulWidget {
   const FoodsScreen({super.key});
 
@@ -25,9 +25,8 @@ class _FoodsScreenState extends State<FoodsScreen> {
   Future<void> _load() async {
     setState(() => _error = null);
     try {
-      final me = context.session.user.id;
       final all = await context.api.foods();
-      if (mounted) setState(() => _foods = all.where((f) => f.userId == me).toList());
+      if (mounted) setState(() => _foods = all);
     } on Object catch (e) {
       if (mounted) setState(() => _error = e);
     }
@@ -45,17 +44,6 @@ class _FoodsScreenState extends State<FoodsScreen> {
     await _load();
   }
 
-  Future<void> _toggleFamily(Food f) async {
-    final t = context.t;
-    try {
-      final u = await context.api.toggleFamily(f.id);
-      if (mounted) showMsg(context, u.isFamily ? t.sharedWithFamily(u.name) : t.notSharedWithFamily(u.name));
-    } on Object catch (e) {
-      if (mounted) showError(context, e);
-    }
-    await _load();
-  }
-
   Future<void> _edit(Food f) async {
     final saved = await showSheet<bool>(context, (_) => _FoodEditor(food: f));
     if (saved == true) await _load();
@@ -64,7 +52,6 @@ class _FoodsScreenState extends State<FoodsScreen> {
   @override
   Widget build(BuildContext context) {
     final t = context.t;
-    final family = context.session.user.isFamilyMember;
     final foods = _foods;
     return Scaffold(
       appBar: AppBar(title: Text(t.foodDbTitle)),
@@ -111,22 +98,12 @@ class _FoodsScreenState extends State<FoodsScreen> {
                               [
                                 if (f.brand != null && f.brand!.isNotEmpty) f.brand!,
                                 t.kcalPer100((f.kcal ?? 0).round()),
-                                if (f.isFamily) t.familyTag,
                               ].join(' · '),
                             ),
                             onTap: () => _edit(f),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                if (family)
-                                  IconButton(
-                                    tooltip: f.isFamily ? t.unshareFamily : t.shareFamily,
-                                    onPressed: () => _toggleFamily(f),
-                                    icon: Icon(
-                                      f.isFamily ? Icons.group : Icons.group_outlined,
-                                      color: f.isFamily ? context.c.accent : null,
-                                    ),
-                                  ),
                                 IconButton(
                                   tooltip: t.delete,
                                   onPressed: () => _delete(f),

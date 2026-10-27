@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../data/session.dart';
 import 'account_tab.dart';
 import 'nutrition_tab.dart';
 import 'weight_tab.dart';
@@ -18,8 +19,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final t = context.t;
+    final revision = SessionScope.of(context).dataRevision;
     return Scaffold(
-      body: IndexedStack(index: _tab, children: const [NutritionTab(), WeightTab(), AccountTab()]),
+      // new keys after a restore or delete: no tab keeps the old data
+      body: IndexedStack(
+        index: _tab,
+        children: [
+          NutritionTab(key: ValueKey('n$revision')),
+          WeightTab(key: ValueKey('w$revision')),
+          const AccountTab(),
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tab,
         onDestinationSelected: (i) => setState(() => _tab = i),

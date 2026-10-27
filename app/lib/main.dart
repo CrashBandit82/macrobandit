@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'data/api.dart';
 import 'data/session.dart';
 import 'l10n/app_localizations.dart';
-import 'ui/auth_screen.dart';
 import 'ui/home_screen.dart';
 import 'ui/theme.dart';
 import 'ui/widgets.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final session = Session(Api())..restore();
+  final session = Session()..start();
   runApp(SessionScope(session: session, child: const MacroBanditApp()));
 }
 
@@ -58,22 +56,17 @@ class _Root extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final session = SessionScope.of(context);
-    switch (session.state) {
-      case SessionState.starting:
-        return const Scaffold(body: Center(child: CircularProgressIndicator()));
-      case SessionState.offline:
-        return Scaffold(
-          body: SafeArea(
-            child: Center(
-              child: LoadState(error: ApiException(0, null), onRetry: session.restore),
-            ),
+    if (session.error != null) {
+      return Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Center(child: Text('${context.t.errorGeneric}\n\n${session.error}', textAlign: TextAlign.center)),
           ),
-        );
-      case SessionState.signedOut:
-        return const AuthScreen();
-      case SessionState.signedIn:
-        // new key per user so no state of a previous account survives
-        return HomeScreen(key: ValueKey(session.user.id));
+        ),
+      );
     }
+    if (!session.ready) return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    return const HomeScreen();
   }
 }

@@ -6,37 +6,63 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
-/** Adds "saveFile": lets the user pick a location (Storage Access Framework) and writes bytes there. */
+/**
+ * Adds "saveFile" (the user picks a location, bytes are written there) and
+ * "openFile" (the user picks a file, its bytes are returned) via the Storage
+ * Access Framework.
+ */
 class MainActivity : FlutterActivity() {
     private var pendingResult: MethodChannel.Result? = null
     private var pendingBytes: ByteArray? = null
+    private var pendingRequest = 0
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "at.macrobandit.app/files")
             .setMethodCallHandler { call, result ->
-                if (call.method != "saveFile") return@setMethodCallHandler result.notImplemented()
+                if (call.method != "saveFile" && call.method != "openFile") {
+                    return@setMethodCallHandler result.notImplemented()
+                }
                 if (pendingResult != null) return@setMethodCallHandler result.error("busy", null, null)
                 pendingResult = result
-                pendingBytes = call.argument<ByteArray>("bytes")
-                val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-                    addCategory(Intent.CATEGORY_OPENABLE)
-                    type = call.argument<String>("mime")
-                    putExtra(Intent.EXTRA_TITLE, call.argument<String>("name"))
+                if (call.method == "saveFile") {
+                    pendingBytes = call.argument<ByteArray>("bytes")
+                    pendingRequest = SAVE_REQUEST
+                    val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = call.argument<String>("mime")
+                        putExtra(Intent.EXTRA_TITLE, call.argument<String>("name"))
+                    }
+                    startActivityForResult(intent, SAVE_REQUEST)
+                } else {
+                    pendingRequest = OPEN_REQUEST
+                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                        addCategory(Intent.CATEGORY_OPENABLE)
+                        type = "*/*"
+                    }
+                    startActivityForResult(intent, OPEN_REQUEST)
                 }
-                startActivityForResult(intent, SAVE_REQUEST)
             }
     }
 
     @Deprecated("startActivityForResult keeps the activity free of extra dependencies")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode != SAVE_REQUEST) return
+        if (requestCode != pendingRequest) return
         val result = pendingResult ?: return
         val bytes = pendingBytes
         pendingResult = null
         pendingBytes = null
+        pendingRequest = 0
         val uri = data?.data
+        if (requestCode == OPEN_REQUEST) {
+            if (resultCode != Activity.RESULT_OK || uri == null) return result.success(null)
+            return try {
+                result.success(contentResolver.openInputStream(uri)?.use { it.readBytes() })
+            } catch (e: Exception) {
+                result.error("read", e.message, null)
+            }
+        }
         if (resultCode != Activity.RESULT_OK || uri == null || bytes == null) return result.success(false)
         try {
             contentResolver.openOutputStream(uri)?.use { it.write(bytes) }
@@ -48,5 +74,6 @@ class MainActivity : FlutterActivity() {
 
     companion object {
         private const val SAVE_REQUEST = 4711
+        private const val OPEN_REQUEST = 4712
     }
 }

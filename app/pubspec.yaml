@@ -1,7 +1,7 @@
 name: macrobandit
-description: "MacroBandit – native Android app for the free macro and calorie tracker macrobandit.at."
+description: "MacroBandit – offline macro and calorie tracker for Android, no account needed."
 publish_to: 'none'
-version: 2.0.0+2
+version: 3.0.0+3
 
 environment:
   sdk: ^3.13.5
@@ -14,9 +14,10 @@ dependencies:
   flutter_secure_storage: ^11.2.0
   flutter_zxing: ^3.1.0
   http: ^1.6.0
-  http_parser: ^4.1.2
   image_picker: ^1.2.4
   intl: ^0.20.3
+  path_provider: ^2.1.6
+  sqlite3: ^3.5.2
 
 dev_dependencies:
   flutter_test:
@@ -28,3 +29,12 @@ flutter:
   generate: true
   assets:
     - assets/logo.png
+    - assets/bls.tsv
+
+# Compile SQLite from source (tool/fetch-sqlite.sh) instead of downloading
+# a prebuilt library – required for F-Droid, used for all builds.
+hooks:
+  user_defines:
+    sqlite3:
+      source: source
+      path: third_party/sqlite/sqlite3.c

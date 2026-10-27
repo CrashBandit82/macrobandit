@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
+import '../data/api.dart';
 import '../data/session.dart';
 import 'theme.dart';
 import 'widgets.dart';
@@ -42,8 +44,8 @@ class AccountTab extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(user.username, style: context.tt.titleLarge),
-                          Text(user.email, style: context.tt.bodyMedium!.copyWith(color: c.muted)),
+                          Text(user.username.isEmpty ? t.profileTitle : user.username, style: context.tt.titleLarge),
+                          Text(t.localDataInfo, style: context.tt.bodyMedium!.copyWith(color: c.muted)),
                         ],
                       ),
                     ),
@@ -58,23 +60,24 @@ class AccountTab extends StatelessWidget {
                         context,
                         Icons.person_outline,
                         t.changeUsername,
-                        user.username,
+                        user.username.isEmpty ? null : user.username,
                         () => _changeUsername(context),
                       ),
                       const Divider(),
-                      _item(context, Icons.key_outlined, t.changePassword, null, () => _changePassword(context)),
-                      const Divider(),
                       _item(context, Icons.photo_camera_outlined, t.changeAvatar, null, () => _avatarMenu(context)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    children: [
+                      _item(context, Icons.save_outlined, t.backupTitle, t.backupSub, () => _backup(context)),
+                      const Divider(),
+                      _item(context, Icons.restore, t.restoreTitle, t.restoreSub, () => _restore(context)),
                       const Divider(),
                       _item(context, Icons.download_outlined, t.exportTitle, t.exportSub, () => _export(context)),
-                      const Divider(),
-                      _item(
-                        context,
-                        Icons.chat_bubble_outline,
-                        t.feedbackTitle,
-                        t.feedbackSub,
-                        () => _feedback(context),
-                      ),
                     ],
                   ),
                 ),
@@ -89,21 +92,9 @@ class AccountTab extends StatelessWidget {
                         const SizedBox(height: 10),
                         SegmentedButton<ThemeMode>(
                           segments: [
-                            ButtonSegment(
-                              value: ThemeMode.system,
-                              label: Text(t.themeSystem),
-                              icon: const Icon(Icons.brightness_auto_outlined),
-                            ),
-                            ButtonSegment(
-                              value: ThemeMode.light,
-                              label: Text(t.themeLight),
-                              icon: const Icon(Icons.light_mode_outlined),
-                            ),
-                            ButtonSegment(
-                              value: ThemeMode.dark,
-                              label: Text(t.themeDark),
-                              icon: const Icon(Icons.dark_mode_outlined),
-                            ),
+                            segment(ThemeMode.system, t.themeSystem),
+                            segment(ThemeMode.light, t.themeLight),
+                            segment(ThemeMode.dark, t.themeDark),
                           ],
                           selected: {session.themeMode},
                           showSelectedIcon: false,
@@ -116,19 +107,13 @@ class AccountTab extends StatelessWidget {
                 const SizedBox(height: 12),
                 Card(
                   clipBehavior: Clip.antiAlias,
-                  child: Column(
-                    children: [
-                      _item(context, Icons.logout, t.logout, t.logoutSub, () => context.session.logout()),
-                      const Divider(),
-                      _item(
-                        context,
-                        Icons.delete_forever_outlined,
-                        t.deleteAccount,
-                        t.deleteAccountSub,
-                        () => _deleteAccount(context),
-                        danger: true,
-                      ),
-                    ],
+                  child: _item(
+                    context,
+                    Icons.delete_forever_outlined,
+                    t.deleteAllData,
+                    t.deleteAllDataSub,
+                    () => _deleteAll(context),
+                    danger: true,
                   ),
                 ),
                 const SizedBox(height: 28),
@@ -155,7 +140,16 @@ class AccountTab extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Center(
-                  child: Text('macrobandit.at', style: context.tt.bodySmall!.copyWith(color: c.faint)),
+                  child: SelectableText(
+                    'github.com/CrashBandit82/macrobandit',
+                    style: context.tt.bodySmall!.copyWith(color: c.faint),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  t.dataSources,
+                  textAlign: TextAlign.center,
+                  style: context.tt.bodySmall!.copyWith(color: c.faint),
                 ),
               ],
             ),
@@ -216,8 +210,8 @@ class AccountTab extends StatelessWidget {
       }
       final file = await ImagePicker().pickImage(
         source: ImageSource.gallery,
-        maxWidth: 1024,
-        maxHeight: 1024,
+        maxWidth: 512,
+        maxHeight: 512,
         imageQuality: 85,
       );
       if (file == null || !context.mounted) return;
@@ -227,12 +221,12 @@ class AccountTab extends StatelessWidget {
         return;
       }
       final name = file.name.toLowerCase();
-      final mime = name.endsWith('.png')
-          ? 'image/png'
+      final ext = name.endsWith('.png')
+          ? 'png'
           : name.endsWith('.webp')
-          ? 'image/webp'
-          : 'image/jpeg';
-      session.updateUser(await session.api.uploadAvatar(bytes, file.name, mime));
+          ? 'webp'
+          : 'jpg';
+      session.updateUser(await session.api.setAvatar(bytes, ext));
       if (context.mounted) showMsg(context, t.avatarUpdated);
     } on Object catch (e) {
       if (context.mounted) showError(context, e);
@@ -242,153 +236,73 @@ class AccountTab extends StatelessWidget {
   Future<void> _changeUsername(BuildContext context) async {
     final t = context.t;
     final session = context.session;
-    final name = await _prompt(context, t.changeUsername, t.newUsername, initial: session.user.username);
-    if (name == null || name.trim().isEmpty || !context.mounted) return;
-    try {
-      session.updateUser(await session.api.changeUsername(name.trim()));
-      if (context.mounted) showMsg(context, t.usernameChanged);
-    } on Object catch (e) {
-      if (context.mounted) showError(context, e);
-    }
+    final name = await showDialog<String>(
+      context: context,
+      builder: (_) =>
+          PromptDialog(title: t.changeUsername, label: t.newUsername, initial: session.user.username, maxLength: 50),
+    );
+    if (name == null || !context.mounted) return;
+    session.updateUser(await session.api.changeUsername(name));
+    if (context.mounted) showMsg(context, t.usernameChanged);
   }
 
-  Future<void> _changePassword(BuildContext context) async {
-    final ok = await showSheet<bool>(context, (_) => const _PasswordSheet());
-    if (ok == true && context.mounted) showMsg(context, context.t.passwordChanged);
+  static String get _stamp => DateFormat('yyyyMMdd').format(DateTime.now());
+
+  Future<void> _save(BuildContext context, String name, String mime, Uint8List bytes, String done) async {
+    final saved = await _files.invokeMethod<bool>('saveFile', {'name': name, 'mime': mime, 'bytes': bytes});
+    if (saved == true && context.mounted) showMsg(context, done);
   }
 
   Future<void> _export(BuildContext context) async {
-    final t = context.t;
+    final done = context.t.exportSaved;
     try {
-      final Uint8List csv = await context.api.exportCsv();
-      final now = DateTime.now();
-      final stamp = '${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}';
-      final saved = await _files.invokeMethod<bool>('saveFile', {
-        'name': 'macrobandit_export_$stamp.csv',
-        'mime': 'text/csv',
-        'bytes': csv,
-      });
-      if (saved == true && context.mounted) showMsg(context, t.exportSaved);
+      final csv = await context.api.exportCsv();
+      if (context.mounted) await _save(context, 'macrobandit_export_$_stamp.csv', 'text/csv', csv, done);
     } on Object catch (e) {
       if (context.mounted) showError(context, e);
     }
   }
 
-  Future<void> _feedback(BuildContext context) async {
-    final t = context.t;
-    final msg = await _prompt(context, t.feedbackTitle, t.feedbackHint, multiline: true, action: t.send);
-    if (msg == null || !context.mounted) return;
-    if (msg.trim().length < 5) {
-      showMsg(context, t.feedbackMin, error: true);
-      return;
-    }
+  Future<void> _backup(BuildContext context) async {
+    final done = context.t.backupSaved;
     try {
-      await context.api.sendFeedback(msg.trim());
-      if (context.mounted) showMsg(context, t.feedbackThanks);
+      final json = await context.api.exportBackup();
+      if (context.mounted) await _save(context, 'macrobandit_sicherung_$_stamp.json', 'application/json', json, done);
     } on Object catch (e) {
       if (context.mounted) showError(context, e);
     }
   }
 
-  Future<void> _deleteAccount(BuildContext context) async {
-    final ok = await showSheet<bool>(context, (_) => const _DeleteSheet());
-    if (ok == true && context.mounted) await context.session.logout();
-  }
-
-  Future<String?> _prompt(
-    BuildContext context,
-    String title,
-    String label, {
-    String initial = '',
-    bool multiline = false,
-    String? action,
-  }) => showDialog<String>(
-    context: context,
-    builder: (_) => PromptDialog(
-      title: title,
-      label: label,
-      initial: initial,
-      multiline: multiline,
-      maxLength: multiline ? 2000 : 50,
-      action: action,
-    ),
-  );
-}
-
-class _PasswordSheet extends StatefulWidget {
-  const _PasswordSheet();
-
-  @override
-  State<_PasswordSheet> createState() => _PasswordSheetState();
-}
-
-class _PasswordSheetState extends State<_PasswordSheet> {
-  final _form = GlobalKey<FormState>();
-  final _current = TextEditingController();
-  final _next = TextEditingController();
-  final _repeat = TextEditingController();
-  var _busy = false;
-
-  @override
-  void dispose() {
-    _current.dispose();
-    _next.dispose();
-    _repeat.dispose();
-    super.dispose();
-  }
-
-  Future<void> _save() async {
-    if (!_form.currentState!.validate()) return;
-    setState(() => _busy = true);
+  Future<void> _restore(BuildContext context) async {
+    final t = context.t;
+    final session = context.session;
     try {
-      await context.api.changePassword(_current.text, _next.text);
-      if (mounted) Navigator.pop(context, true);
-    } on Object catch (e) {
-      if (mounted) {
-        showError(context, e);
-        setState(() => _busy = false);
+      final bytes = await _files.invokeMethod<Uint8List>('openFile');
+      if (bytes == null || !context.mounted) return;
+      final DateTime? when;
+      try {
+        when = session.api.checkBackup(bytes);
+      } on ApiException catch (e) {
+        showMsg(context, e.status == 426 ? t.backupTooNew : t.backupInvalid, error: true);
+        return;
       }
+      final date = when == null
+          ? ''
+          : ' ${t.backupFrom(DateFormat.yMMMMd(Localizations.localeOf(context).toLanguageTag()).add_Hm().format(when.toLocal()))}';
+      if (!await confirm(context, t.restoreConfirm(date), action: t.restoreAction) || !context.mounted) return;
+      await session.api.importBackup(bytes);
+      await session.dataReplaced();
+      if (context.mounted) showMsg(context, t.restoreDone);
+    } on ApiException catch (e) {
+      if (context.mounted) showMsg(context, e.status == 426 ? t.backupTooNew : t.backupInvalid, error: true);
+    } on Object catch (e) {
+      if (context.mounted) showError(context, e);
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final t = context.t;
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-      child: Form(
-        key: _form,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(t.changePassword, style: context.tt.titleLarge),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _current,
-              obscureText: true,
-              decoration: InputDecoration(labelText: t.currentPassword),
-              validator: requiredText(context),
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: _next,
-              obscureText: true,
-              decoration: InputDecoration(labelText: t.newPassword, helperText: t.passwordRulesHint, helperMaxLines: 2),
-              validator: requiredText(context),
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: _repeat,
-              obscureText: true,
-              decoration: InputDecoration(labelText: t.confirmPassword),
-              validator: (v) => v != _next.text ? t.passwordMismatch : null,
-            ),
-            const SizedBox(height: 20),
-            GradientButton(label: t.changePassword, busy: _busy, onPressed: _save),
-          ],
-        ),
-      ),
-    );
+  Future<void> _deleteAll(BuildContext context) async {
+    final ok = await showSheet<bool>(context, (_) => const _DeleteSheet());
+    if (ok == true && context.mounted) showMsg(context, context.t.allDataDeleted);
   }
 }
 
@@ -400,7 +314,6 @@ class _DeleteSheet extends StatefulWidget {
 }
 
 class _DeleteSheetState extends State<_DeleteSheet> {
-  final _password = TextEditingController();
   final _word = TextEditingController();
   var _busy = false;
 
@@ -408,20 +321,20 @@ class _DeleteSheetState extends State<_DeleteSheet> {
   void initState() {
     super.initState();
     _word.addListener(() => setState(() {}));
-    _password.addListener(() => setState(() {}));
   }
 
   @override
   void dispose() {
-    _password.dispose();
     _word.dispose();
     super.dispose();
   }
 
   Future<void> _delete() async {
     setState(() => _busy = true);
+    final session = context.session;
     try {
-      await context.api.deleteAccount(_password.text);
+      await session.api.deleteAllData();
+      await session.dataReplaced();
       if (mounted) Navigator.pop(context, true);
     } on Object catch (e) {
       if (mounted) {
@@ -435,22 +348,16 @@ class _DeleteSheetState extends State<_DeleteSheet> {
   Widget build(BuildContext context) {
     final t = context.t;
     final word = t.deleteConfirmWord;
-    final ready = _word.text.trim() == word && _password.text.isNotEmpty;
+    final ready = _word.text.trim() == word;
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(t.deleteAccount, style: context.tt.titleLarge!.copyWith(color: context.c.fatText)),
+          Text(t.deleteAllData, style: context.tt.titleLarge!.copyWith(color: context.c.fatText)),
           const SizedBox(height: 12),
           Text(t.deleteWarning, style: TextStyle(color: context.c.soft)),
           const SizedBox(height: 16),
-          TextField(
-            controller: _password,
-            obscureText: true,
-            decoration: InputDecoration(labelText: t.currentPassword),
-          ),
-          const SizedBox(height: 10),
           TextField(
             controller: _word,
             textCapitalization: TextCapitalization.characters,

@@ -135,11 +135,7 @@ class _NutritionTabState extends State<NutritionTab> {
     final grams = text == null ? null : parseNum(text);
     if (grams == null || grams <= 0 || !mounted) return;
     try {
-      // the server has no update: add the new entry first, then remove the old
-      // one, so a failure never loses the entry
-      final api = context.api;
-      await api.addLog(log.foodId!, grams);
-      await api.deleteLog(log.id);
+      await context.api.updateLogAmount(log.id, grams);
       if (mounted) showMsg(context, t.itemUpdated(log.foodName));
     } on Object catch (e) {
       if (mounted) showError(context, e);
@@ -191,13 +187,15 @@ class _NutritionTabState extends State<NutritionTab> {
                         Expanded(
                           child: Semantics(
                             header: true,
-                            child: Text(t.greeting(user.username), style: context.tt.titleLarge),
+                            child: Text(
+                              user.username.isEmpty ? t.greetingNoName : t.greeting(user.username),
+                              style: context.tt.titleLarge,
+                            ),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 16),
-                    if (!user.isVerified) const _VerifyBanner(),
                     _dateRow(context, isToday),
                     const SizedBox(height: 16),
                     if (_error != null && _totals == null)
@@ -211,10 +209,7 @@ class _NutritionTabState extends State<NutritionTab> {
                     ],
                     const SizedBox(height: 24),
                     SegmentedButton<bool>(
-                      segments: [
-                        ButtonSegment(value: false, label: Text(t.tabWeek)),
-                        ButtonSegment(value: true, label: Text(t.tabMonth)),
-                      ],
+                      segments: [segment(false, t.tabWeek), segment(true, t.tabMonth)],
                       selected: {_showMonth},
                       showSelectedIcon: false,
                       onSelectionChanged: (s) => setState(() => _showMonth = s.first),
@@ -249,7 +244,7 @@ class _NutritionTabState extends State<NutritionTab> {
                                 foregroundColor: const Color(0xFF020617),
                               ),
                               icon: const Icon(Icons.qr_code_scanner, size: 18),
-                              label: Text(t.scanBarcode),
+                              label: FittedBox(fit: BoxFit.scaleDown, child: Text(t.scanBarcode, maxLines: 1)),
                               onPressed: _scan,
                             ),
                           ),
@@ -347,53 +342,6 @@ class _NutritionTabState extends State<NutritionTab> {
           icon: const Icon(Icons.chevron_right),
         ),
       ],
-    );
-  }
-}
-
-class _VerifyBanner extends StatelessWidget {
-  const _VerifyBanner();
-
-  @override
-  Widget build(BuildContext context) {
-    final t = context.t;
-    final c = context.c;
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.fromLTRB(14, 10, 8, 10),
-      decoration: BoxDecoration(
-        color: c.warnBg,
-        border: Border.all(color: c.carbs.withValues(alpha: 0.5)),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  t.emailNotVerified,
-                  style: context.tt.titleSmall!.copyWith(color: c.warn, fontWeight: FontWeight.w800),
-                ),
-                Text(t.emailNotVerifiedSub, style: context.tt.bodySmall!.copyWith(color: c.warn)),
-              ],
-            ),
-          ),
-          TextButton(
-            style: TextButton.styleFrom(foregroundColor: c.warn),
-            onPressed: () async {
-              try {
-                await context.api.resendVerification();
-                if (context.mounted) showMsg(context, t.verificationSent);
-              } on Object catch (e) {
-                if (context.mounted) showError(context, e);
-              }
-            },
-            child: Text(t.resend),
-          ),
-        ],
-      ),
     );
   }
 }

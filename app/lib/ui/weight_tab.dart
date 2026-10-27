@@ -340,8 +340,8 @@ class _WeightChart extends CustomPainter {
   bool shouldRepaint(_WeightChart old) => old.entries != entries || old.c != c;
 }
 
-/// TDEE calculator (Mifflin-St Jeor). Profile values are kept on the device
-/// (the API can store but not return them) and sent to the server like the web app does.
+/// TDEE calculator (Mifflin-St Jeor). Age, height and gender are remembered;
+/// the weight starts with the latest tracker value.
 class _TdeeCard extends StatefulWidget {
   const _TdeeCard();
 
@@ -355,6 +355,7 @@ class _TdeeCardState extends State<_TdeeCard> {
   var _male = true;
   final _age = TextEditingController();
   final _height = TextEditingController();
+  final _weight = TextEditingController();
   var _activity = Activity.moderate;
   var _goal = WeightGoal.maintain;
   int? _result;
@@ -370,10 +371,13 @@ class _TdeeCardState extends State<_TdeeCard> {
     final a = await _storage.read(key: 'tdee_age');
     final h = await _storage.read(key: 'tdee_height');
     if (!mounted) return;
+    final kg = (await context.api.weightHistory()).latest;
+    if (!mounted) return;
     setState(() {
       _male = g != 'female';
       _age.text = a ?? '';
       _height.text = h ?? '';
+      if (kg != null && _weight.text.isEmpty) _weight.text = fmtNum(context, kg);
     });
   }
 
@@ -381,26 +385,16 @@ class _TdeeCardState extends State<_TdeeCard> {
   void dispose() {
     _age.dispose();
     _height.dispose();
+    _weight.dispose();
     super.dispose();
-  }
-
-  Future<double?> _latestWeight() async {
-    final h = await context.api.weightHistory();
-    return h.latest;
   }
 
   Future<void> _calc() async {
     final t = context.t;
+    FocusScope.of(context).unfocus();
     final age = int.tryParse(_age.text.trim());
     final height = int.tryParse(_height.text.trim());
-    double? kg;
-    try {
-      kg = await _latestWeight();
-    } on Object catch (e) {
-      if (mounted) showError(context, e);
-      return;
-    }
-    if (!mounted) return;
+    final kg = parseNum(_weight.text);
     final r = calcTdee(male: _male, age: age, heightCm: height, weightKg: kg, activity: _activity, goal: _goal);
     if (r == null) {
       showMsg(context, t.fillAllFields, error: true);
@@ -411,11 +405,6 @@ class _TdeeCardState extends State<_TdeeCard> {
     await _storage.write(key: 'tdee_gender', value: gender);
     await _storage.write(key: 'tdee_age', value: '$age');
     await _storage.write(key: 'tdee_height', value: '$height');
-    try {
-      if (mounted) await context.api.updateProfile(gender, age!, height!);
-    } on Object {
-      // profile on the server is optional
-    }
   }
 
   Future<void> _apply() async {
@@ -458,10 +447,7 @@ class _TdeeCardState extends State<_TdeeCard> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SegmentedButton<bool>(
-                    segments: [
-                      ButtonSegment(value: true, label: Text(t.male)),
-                      ButtonSegment(value: false, label: Text(t.female)),
-                    ],
+                    segments: [segment(true, t.male), segment(false, t.female)],
                     selected: {_male},
                     showSelectedIcon: false,
                     onSelectionChanged: (s) => setState(() => _male = s.first),
@@ -487,6 +473,12 @@ class _TdeeCardState extends State<_TdeeCard> {
                     ],
                   ),
                   const SizedBox(height: 12),
+                  TextField(
+                    controller: _weight,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: InputDecoration(labelText: t.weightKg),
+                  ),
+                  const SizedBox(height: 12),
                   DropdownButtonFormField<Activity>(
                     initialValue: _activity,
                     isExpanded: true,
@@ -505,9 +497,9 @@ class _TdeeCardState extends State<_TdeeCard> {
                   const SizedBox(height: 6),
                   SegmentedButton<WeightGoal>(
                     segments: [
-                      ButtonSegment(value: WeightGoal.lose, label: Text(t.goalLose)),
-                      ButtonSegment(value: WeightGoal.maintain, label: Text(t.goalMaintain)),
-                      ButtonSegment(value: WeightGoal.gain, label: Text(t.goalGain)),
+                      segment(WeightGoal.lose, t.goalLose),
+                      segment(WeightGoal.maintain, t.goalMaintain),
+                      segment(WeightGoal.gain, t.goalGain),
                     ],
                     selected: {_goal},
                     showSelectedIcon: false,
