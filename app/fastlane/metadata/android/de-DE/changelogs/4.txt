@@ -1,0 +1,1 @@
+Englische Screenshots für die Store-Seite. Behoben: Im englischen Tagebuch standen die deutschen Nährwert-Kürzel K und B, jetzt C und Fib.

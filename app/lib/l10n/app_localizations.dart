@@ -512,6 +512,30 @@ abstract class AppLocalizations {
   /// **'KH'**
   String get shortCarbs;
 
+  /// No description provided for @abbrProtein.
+  ///
+  /// In de, this message translates to:
+  /// **'P'**
+  String get abbrProtein;
+
+  /// No description provided for @abbrCarbs.
+  ///
+  /// In de, this message translates to:
+  /// **'K'**
+  String get abbrCarbs;
+
+  /// No description provided for @abbrFat.
+  ///
+  /// In de, this message translates to:
+  /// **'F'**
+  String get abbrFat;
+
+  /// No description provided for @abbrFiber.
+  ///
+  /// In de, this message translates to:
+  /// **'B'**
+  String get abbrFiber;
+
   /// No description provided for @mealName.
   ///
   /// In de, this message translates to:

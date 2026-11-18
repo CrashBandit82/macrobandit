@@ -251,6 +251,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get shortCarbs => 'KH';
 
   @override
+  String get abbrProtein => 'P';
+
+  @override
+  String get abbrCarbs => 'K';
+
+  @override
+  String get abbrFat => 'F';
+
+  @override
+  String get abbrFiber => 'B';
+
+  @override
   String get mealName => 'Name der Mahlzeit';
 
   @override

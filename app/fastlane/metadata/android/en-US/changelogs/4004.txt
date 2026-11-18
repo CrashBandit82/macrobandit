@@ -1,0 +1,1 @@
+English screenshots for the store page. Fixed: the English diary showed the German macro abbreviations K and B, now C and Fib.
