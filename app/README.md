@@ -6,7 +6,11 @@ the only network access is the optional product lookup at Open Food Facts
 
 ## Build
 
-Flutter 3.47 (stable), JDK 17, Android SDK 36, NDK r28c, a C compiler for SQLite.
+Flutter 3.47.7 (pinned in `.fvmrc`, F-Droid reads it from there), JDK 17,
+Android SDK 36, NDK r28c, a C compiler for SQLite.
+
+With `--split-per-abi` each APK gets the version code `build number * 10 + ABI`
+(armeabi-v7a 1, arm64-v8a 2, x86_64 3), set in `android/app/build.gradle.kts`.
 
 ```sh
 tool/fetch-sqlite.sh        # SQLite amalgamation, compiled from source
